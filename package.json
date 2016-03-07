@@ -1,0 +1,27 @@
+{
+  "name": "call-me-maybe-rp",
+  "version": "0.0.1",
+  "description": "A Node.js app using Express 4 that serves as a Slack app to create calls for meetings in a users Google Calendar",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ejs": "2.3.3",
+    "express": "4.13.3",
+    "request": "^2.69.0"
+  },
+  "engines": {
+    "node": "0.12.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.heroku.com/call-me-maybe-rp.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}

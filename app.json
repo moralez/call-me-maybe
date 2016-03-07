@@ -1,0 +1,8 @@
+{
+  "name": "Call Me Maybe",
+  "description": "Slack App created using Node.js",
+  "repository": "https://github.com/moralez/call-me-maybe",
+  "logo": "http://i.imgur.com/XI0AYys.jpg",
+  "keywords": ["rentpath", "slack", "call"],
+  "image": "heroku/nodejs"
+}
