@@ -42,7 +42,7 @@ function getKey(code) {
       'client_id': '24999931810.25003305249',
       'client_secret': '2ef373aad7fac39fdb54aceeae307039',
       'code': code,
-      'redirect_uri': 'https://intense-springs-30435.herokuapp.com/auth'
+      'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
     }
   }
 
