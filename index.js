@@ -112,7 +112,7 @@ app.post('/roulette',function(req,res){
       var usergroups = convertedBody["usergroups"];
       for (var i = 0; i < usergroups.length; i++) {
          var group = usergroups[i];
-console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         console.log("Comparing " + req.body.text + " to " + group["handle"]);
          if (req.body.text == group.handle) {
             console.log("The magic ID is: " + group.id);
             var blah = { token:ACCESS_TOKEN, usergroup:group.id };
@@ -120,6 +120,14 @@ console.log("Comparing " + req.body.text + " to " + group["handle"]);
                var users = JSON.parse(body)["users"];
                var rand = users[Math.floor(Math.random() * users.length)];
                console.log("random Member id: ", rand);
+               
+               var userInfo = { token:ACCESS_TOKEN, user:rand };
+               request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+                  var user = JSON.parse(body)["user"];
+                  var userName = user["name"];
+                  console.log("User Name: ", userName);
+                  res.end(userName + " has been chosen");
+               });
             });
          } else {
             console.log("You suck!");
@@ -129,6 +137,6 @@ console.log("Comparing " + req.body.text + " to " + group["handle"]);
  
 //}) 
 
-  res.end("yes");
+  //res.end("yes");
 });
 
