@@ -53,3 +53,22 @@ function getKey(code) {
     }
   })
 }
+
+app.get('/test', function(req, res) {
+   var properties = { "default": "this is a default key" };
+   console.log("Query Strings: ", req.query)
+   for (var property in req.query) {
+console.log("Processing ", property);
+      if (req.query.hasOwnProperty(property)) {
+         // do stuff
+console.log("Adding ", property);
+         properties[property] = req.query[property];
+      } else {
+console.log("Skipping ", property);
+      }
+   }
+
+   res.json(properties);
+});
+
+
