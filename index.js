@@ -115,6 +115,12 @@ app.post('/roulette',function(req,res){
 console.log("Comparing " + req.body.text + " to " + group["handle"]);
          if (req.body.text == group.handle) {
             console.log("The magic ID is: " + group.id);
+            var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+            request({"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+               var users = JSON.parse(body)["user"];
+               var rand = memberArray[Math.floor(Math.random() * memberArray.length)];
+               console.log("random Member id: ", rand);
+            });
          } else {
             console.log("You suck!");
          } 
