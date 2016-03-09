@@ -7,10 +7,12 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "body-parser": "~1.15.0",
     "ejs": "2.3.3",
     "express": "4.13.3",
-    "request": "^2.69.0",
-    "body-parser": "~1.15.0"
+    "node-persist": "0.0.8",
+    "redis": "2.5.0-1",
+    "request": "^2.69.0"
   },
   "engines": {
     "node": "0.12.7"

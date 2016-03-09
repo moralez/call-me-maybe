@@ -1,4 +1,9 @@
 var http = require('http');
+var fs = require("fs");
+var redis = require("redis");
+var client = redis.createClient('11040', '127.0.0.1');
+
+
 var requestHelper = require('request');
 var express = require('express');
 var app = express();
@@ -8,15 +13,45 @@ var express        =        require("express");
 var bodyParser     =        require("body-parser");
 var app            =        express();
 
-var ACCESS_TOKEN = "xoxp-24999931810-24999636768-25360127220-4879e4d896";
-var BOT_ACCESS_TOKEN = "xoxb-25049965060-BXU8Ua6XPvBIgyD4MbuQLmtc";
+var accessFileString = require("./tokens.json");
+
+console.log("Tokens: " + accessFileString);
+console.log("Tokens: " + JSON.stringify(accessFileString));
+
+var ACCESS_TOKEN = "";
+if (accessFileString.hasOwnProperty("ACCESS_TOKEN")) {
+	console.log("Did set ACCESS_TOKEN: " + accessFileString.ACCESS_TOKEN);
+	ACCESS_TOKEN = accessFileString.ACCESS_TOKEN
+} else {
+    console.log("Didn't set ACCESS_TOKEN");
+}
+
+
+var BOT_ACCESS_TOKEN = ""
+if (accessFileString.hasOwnProperty("BOT_ACCESS_TOKEN")) {
+	console.log("Did set BOT_ACCESS_TOKEN: " + accessFileString.BOT_ACCESS_TOKEN);
+	BOT_ACCESS_TOKEN = accessFileString.BOT_ACCESS_TOKEN
+} else {
+    console.log("Didn't set BOT_ACCESS_TOKEN");
+}
+
+client.on('connect', function() {
+    console.log('connected');
+
+	client.get('ACCESS_TOKEN', function(res) {
+	    console.log(res.toString()); // => should be crazy token
+	});
+
+    client.get('BOT_ACCESS_TOKEN', function(res) {
+	    console.log(res.toString()); // => should be crazy token
+	});
+});
 
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.set('port', (process.env.PORT || 5000));
-
 app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
@@ -28,11 +63,11 @@ app.get('/', function(request, response) {
 });
 
 app.get('/auth', function(request, response) {
-  var url_parts = url.parse(request.url, true);
-  if (request.query.code) {
-     getKey(request.query.code)
-  }
-  response.render('pages/index');
+   var url_parts = url.parse(request.url, true);
+   if (request.query.code) {
+      getKey(request.query.code)
+}
+response.render('pages/index');
 });
 
 app.listen(app.get('port'), function() {
@@ -60,83 +95,178 @@ function getKey(code) {
   requestHelper(options, function (error, response, body) {
     if (!error && response.statusCode == 200) {
       // Print out the response body
-      console.log(body)
+      console.log("Body: " + body);
+      var bodyJson = JSON.parse(body)
+      if (bodyJson.hasOwnProperty("error")) {
+         console.log("Beth is breaking stuff again....");
+      } else {
+         console.log("No worries, Johnny fixed it!");
+         
+         console.log("BodyJSON Tokens " + JSON.stringify(bodyJson));
+         
+         var tokenJSON = {
+   				 ACCESS_TOKEN: bodyJson.access_token,
+   				 BOT_ACCESS_TOKEN : bodyJson.bot.bot_access_token
+		};
+
+		ACCESS_TOKEN = tokenJSON.ACCESS_TOKEN;
+		BOT_ACCESS_TOKEN = tokenJSON.BOT_ACCESS_TOKEN;
+		console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
+		client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
+		client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
+
+        // fs.writeFileSync( "tokens.json", JSON.stringify( tokenJSON ), "utf8");
+        fs.writeFile('./tokens.json', JSON.stringify(tokenJSON), function (err) {
+           if (err) throw err;
+           console.log('It\'s saved!');
+        });
+      }
+      
+      console.log("Response: " + response);
     }
   })
 }
 
-app.get('/test', function(req, res) {
-   var properties = { "default": "this is a default key" };
-   console.log("Query Strings: ", req.query)
-   for (var property in req.query) {
-console.log("Processing ", property);
-      if (req.query.hasOwnProperty(property)) {
-         // do stuff
-console.log("Adding ", property);
-         properties[property] = req.query[property];
-      } else {
-console.log("Skipping ", property);
-      }
-   }
+// app.get('/test', function(req, res) {
+//    var properties = { "default": "this is a default key" };
+//    console.log("Query Strings: ", req.query)
+//    for (var property in req.query) {
+// console.log("Processing ", property);
+//       if (req.query.hasOwnProperty(property)) {
+//          // do stuff
+// console.log("Adding ", property);
+//          properties[property] = req.query[property];
+//       } else {
+// console.log("Skipping ", property);
+//       }
+//    }
+// 
+//    res.json(properties);
+// });
 
-   res.json(properties);
+app.get('/tokens', function(req, res) {
+	var tokenString = "";
+	client.get('ACCESS_TOKEN', function(res) {
+		tokenString += res.toString();
+    	console.log(res.toString()); // => should be crazy token
+    	client.get('BOT_ACCESS_TOKEN', function(res) {
+			tokenString += " " + res.toString();
+    		console.log(res.toString()); // => should be crazy token
+    		res.end("Result: " + tokenString);
+		});
+	});
+})
+
+app.post('/checkins', function(req, res) {
+   // someone run /checkins
+   // this grabs the channel message was sent from
+   // gets list of users in the channel
+   // gets the recent chat history from 7 AM  to 11 AM
+   // checks for messages from those users in that time frame
+   // returns lists of who has checked in and who has not
+   // console.log("Request Body: " + JSON.stringify(req.body));
+   // var requestBody = JSON.parse(req.body);
+
+   // var channelsToCheck = [];
+
+   // var userGroupObject = { token:ACCESS_TOKEN };
+   // request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+   //    var convertedBody = JSON.parse(body);
+      
+   //    console.log("converted body: " + JSON.stringify(convertedBody));
+   //    console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+      
+   //    var usergroups = convertedBody["usergroups"];
+   //    for (var i = 0; i < usergroups.length; i++) {
+   //       var group = usergroups[i];
+         
+   //       console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         
+   //       if (req.body.text == group.handle) {
+
+   //          channelsToCheck = group.prefs.channels;
+            
+   //          console.log("The magic ID is: " + group.id);
+            
+   //          var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+   //          request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+   //             var users = JSON.parse(body)["users"];
+
+   //             var checkedInUsers = [];
+
+   //             for (var i = 0; i < channelsToCheck.length; i++) {
+   //                var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
+   //                request({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
+   //                   var messages = JSON.parse(body)["messages"];
+   //                   for (var message in messages) {
+   //                      var userId = message.user;
+
+   //                      if (checkedInUsers.indexOf(userId) == -1) {
+   //                         checkedInUsers.push(userId);
+   //                      }
+   //                   }
+   //                });
+   //             }
+
+   //             res.end("Checked in users: " + checkedInUsers.toString());
+   //          });
+   //       }
+   //    }
+   // });
 });
-
 
 app.post('/roulette',function(req,res){
   var request=JSON.stringify(req.body);
   console.log("request = "+request);
 
  var request = require('request');
-// var propertiesObject = { token:'xoxb-25049965060-ki7nRZf2ROLLT4zOqo9qwM0U', channel:req.body.channel_id };
+  var userGroupObject = { token:ACCESS_TOKEN };
+	request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+	   var convertedBody = JSON.parse(body);
 
-// request({url:"https://slack.com/api/channels.info", qs:propertiesObject}, function(err, response, body) {
-//  if(err) { console.log(err); return; }
-//  
-//  console.log("/roulette text: " + req.body.text)
-//  console.log("Get response: " + response);
-//  console.log("Get body: " + body);
-//  var bodyJson = JSON.parse(body);
-//  console.log("Get Channel:" + bodyJson.channel);
-//  console.log("Get Members: " + bodyJson.channel.members);
-//  var memberArray = bodyJson.channel.members
-// 
-//  var rand = memberArray[Math.floor(Math.random() * memberArray.length)];
-//  console.log("random Member id: ", rand);
- 	
-   var userGroupObject = { token:ACCESS_TOKEN };
-   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-      var convertedBody = JSON.parse(body);
-      console.log("converted body: " + JSON.stringify(convertedBody));
-      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
-      var usergroups = convertedBody["usergroups"];
-      for (var i = 0; i < usergroups.length; i++) {
-         var group = usergroups[i];
-         console.log("Comparing " + req.body.text + " to " + group["handle"]);
-         if (req.body.text == group.handle) {
-            console.log("The magic ID is: " + group.id);
-            var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-            request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
-               var users = JSON.parse(body)["users"];
-               var rand = users[Math.floor(Math.random() * users.length)];
-               console.log("random Member id: ", rand);
-               
-               var userInfo = { token:ACCESS_TOKEN, user:rand };
-               request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
-                  var user = JSON.parse(body)["user"];
-                  var userName = user["name"];
-                  console.log("User Name: ", userName);
-                  res.end(userName + " has been chosen");
-               });
-            });
-         } else {
-            console.log("You suck!");
-         } 
-      }
-   })
+		console.log("converted body: " + JSON.stringify(convertedBody));
+		console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+
+		var usergroups = convertedBody["usergroups"];
+		for (var i = 0; i < usergroups.length; i++) {
+		   var group = usergroups[i];
  
-//}) 
-
-  //res.end("yes");
+		   console.log("Comparing " + req.body.text + " to " + group["handle"]);
+ 
+		   if (req.body.text == group.handle) {
+	
+			  console.log("The magic ID is: " + group.id);
+	
+			  var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+			  request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+				 var users = JSON.parse(body)["users"];
+				 var rand = users[Math.floor(Math.random() * users.length)];
+	   
+				 console.log("random Member id: ", rand);
+	   
+				 var userInfo = { token:ACCESS_TOKEN, user:rand };
+				 request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+					var user = JSON.parse(body)["user"];
+					var userName = user["name"];
+		  
+					console.log("User Name: ", userName);
+		  
+					var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
+					 request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+						   console.log("Finished sending postMessage");
+							res.end();
+					  });
+				 });
+			  });
+		   } else {
+			  console.log("You suck!");
+			  if (req.body.text == "") {
+				res.end("Please enter the roulette slash command via /roulette slackUserGroupName");
+			  } else {
+					res.end(req.body.text + " does not appear to be a valid usergroup.")
+				}
+		   } 
+		}
+	 })
 });
 
