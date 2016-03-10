@@ -93,7 +93,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
                contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
 
-               var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user, text: contactInformationText, as_user: true, parse: "full" };
+               var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
                request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
                   console.log("Finished sending postMessage");
                   res.end();
