@@ -212,7 +212,7 @@ console.log("ZipCode: " + zipCode);
 		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
 		for(var i = 0; i < firstTenListings.length; i++) {
 		console.log("i: " + i);
-			var individualListing = "Option " + i + ": " + firstTenListings[i].name + "can be found at " + firstTenListings[i].adr + firstTenListings[i].city + firstTenListings[i].state + ". It has " + firstTenListings[i].beds + " beds, " + firstTenListings[i].bhs + "at " + firstTenListings[i].prices + ".\n";
+			var individualListing = "Option " + i + ": " + firstTenListings[i].name + "can be found at " + firstTenListings[i].adr + firstTenListings[i].city + firstTenListings[i].state + ". It has " + firstTenListings[i].beds + " beds, " + firstTenListings[i].bhs + "at " + firstTenListings[i].prices + ".";
 			console.log("firstTenListings[index]: " + firstTenListings[i]);
 			messageText = messageText + individualListing + "\n";
 		}
