@@ -250,7 +250,7 @@ console.log("ZipCode: " + zipCode);
 				individualListing = individualListing + " available with prices starting at " + index.prices + "."
 			} 
 			if (index.seo_path) {
-				individualListing = individualListing + "http://m.qa.apartmentguide.com/" + index.seo_path
+				individualListing = individualListing + " " + "http://www.qa.apartmentguide.com" + index.seo_path
 			}
 			
 			
