@@ -15,6 +15,7 @@ client.auth(rtg.auth.split(":")[1]);
 
 var ACCESS_TOKEN = "";
 var BOT_ACCESS_TOKEN = "";
+var LAST_SEARCH_ID = "";
 
 client.get("ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
@@ -264,6 +265,9 @@ console.log("ZipCode: " + zipCode);
 		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
       request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
  		   console.log("Finished sending postMessage");
+         var responseBody = JSON.parse(body)
+         LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
+         console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
          res.end();
       });
    });
