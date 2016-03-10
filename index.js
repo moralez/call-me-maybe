@@ -196,7 +196,7 @@ console.log("ZipCode: " + zipCode);
    		console.log("request body: "+ JSON.stringify(body));
    		console.log("err: " + err);
    		console.log("response: " + response);
-   }
+   });
 
 //parse out first 10 listings
 //parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
