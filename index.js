@@ -206,7 +206,7 @@ console.log("ZipCode: " + zipCode);
 		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
 		for(var i = 0; i < listings.length; i++) {
 			console.log("i: " + i);
-			var index = firstTenListings[i]
+			var index = listings[i]
 			var individualListing = "Option " + determineEmojiForOption(i) + ": " 
 			if(index.name) {
 				individualListing = individualListing + index.name
