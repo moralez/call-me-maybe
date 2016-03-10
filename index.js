@@ -188,9 +188,16 @@ app.post('/checkins', function(req, res) {
 app.post('/ag', function(req, res){
 //given zip code, parse out zip code from request
 var zipCode = req.body.text
-console.log("Query: " + zipCode);
+console.log("ZipCode: " + zipCode);
 
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
+	var zipCodeObject = { query:zipCode };
+   request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
+   		console.log("request body: "+ JSON.stringify(body));
+   		console.log("err: " + err);
+   		console.log("response: " + response);
+   }
+
 //parse out first 10 listings
 //parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
 
