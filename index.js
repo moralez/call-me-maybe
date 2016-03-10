@@ -187,6 +187,7 @@ app.post('/checkins', function(req, res) {
 
 app.post('/ag', function(req, res){
 //given zip code, parse out zip code from request
+console.log("Req: " + req);
 var request = JSON.parse(req.body);
 console.log("Request: " + JSON.stringify(request));
 
