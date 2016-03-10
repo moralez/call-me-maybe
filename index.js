@@ -191,7 +191,7 @@ var zipCode = req.body.text
 console.log("ZipCode: " + zipCode);
 
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
-	var zipCodeObject = { query:zipCode, per_page = 10, page = 1 };
+	var zipCodeObject = { query:zipCode, per_page: 10, page: 1 };
 	var request = require('request');
    request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
 
