@@ -32,7 +32,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
       rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'debug'});
       rtm.start();
 
-      rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
+      rtm.on(CLIENT_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
          console.log("Reaction added:", reaction);
       });
     }
