@@ -191,26 +191,20 @@ var zipCode = req.body.text
 console.log("ZipCode: " + zipCode);
 
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
-	var zipCodeObject = { query:zipCode };
+	var zipCodeObject = { query:zipCode, per_page = 10, page = 1 };
 	var request = require('request');
    request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
-   		console.log("request body: "+ JSON.stringify(body));
-   		console.log("err: " + err);
-   		console.log("response: " + response);
-   		
+
    		var responseBody = JSON.parse(body)
    		
    		//parse out first 10 listings
    		var listings = responseBody["listings"]
    		console.log("Listings" + listings);
-   		
-   		var firstTenListings = listings.splice(0, 10)
-   		console.log("First Ten Listings: " + JSON.stringify(firstTenListings));
-   
+   		   
    		//parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
 		
 		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
-		for(var i = 0; i < firstTenListings.length; i++) {
+		for(var i = 0; i < listings.length; i++) {
 			console.log("i: " + i);
 			var index = firstTenListings[i]
 			var individualListing = "Option " + determineEmojiForOption(i) + ": " 
@@ -219,33 +213,27 @@ console.log("ZipCode: " + zipCode);
 			} else {
 				individualListing = "This apartment "
 			}
-			console.log("Individual Listing: " + individualListing);
 			
 			individualListing = individualListing + " can be found " 
 			if(index.adr) {
 				individualListing = individualListing + " at " +  index.adr
 			}
-			console.log("Individual Listing: " + individualListing);
 			
 			if (index.cty || index.st) {
 				individualListing = individualListing + " in " + index.cty + ", " + index.st
 			}
 			
 			individualListing = individualListing + "."
-			console.log("Individual Listing: " + individualListing);
 			
 			if(index.beds) {
 				individualListing = individualListing + " " + index.beds + " beds" 
 			} 
 			
-			console.log("Individual Listing: " + individualListing);
 			
 			if(index.bhs) {
 				individualListing = individualListing + " " + index.baths + " baths" 
 			}
-			
-			console.log("Individual Listing: " + individualListing);
-			
+						
 			if(index.prices) {
 				individualListing = individualListing + " available with prices starting at " + index.prices + "."
 			} 
@@ -253,14 +241,11 @@ console.log("ZipCode: " + zipCode);
 				individualListing = individualListing + " " + "http://www.qa.apartmentguide.com" + index.seo_path
 			}
 			
-			
-			
-			console.log("firstTenListings[index]: " + firstTenListings[i]);
 			messageText = messageText + individualListing + "\n";
 			console.log("Message Text: " + messageText);
 		}
 		
-		messageText = messageText + "\n\n Please select from options 0 - " + (firstTenListings.length - 1) 
+		messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) 
 		
    		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true, parse: "full" };
         request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
