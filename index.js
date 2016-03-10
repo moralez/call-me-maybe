@@ -221,14 +221,14 @@ console.log("ZipCode: " + zipCode);
 			}
 			console.log("Individual Listing: " + individualListing);
 			
-			individualListing = individualListing + "can be found " 
+			individualListing = individualListing + " can be found " 
 			if(index.adr) {
 				individualListing = " at " + individualListing + index.adr
 			}
 			console.log("Individual Listing: " + individualListing);
 			
-			if (index.city || index.state) {
-				individualListing = individualListing + " in " + index.cty + index.st
+			if (index.cty || index.st) {
+				individualListing = individualListing + " in " + index.cty + ", " + index.st
 			}
 			
 			individualListing = individualListing + "."
