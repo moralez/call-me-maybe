@@ -41,37 +41,48 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             console.log("We got a match!");
             var reactionValue = reaction.reaction;
             switch (reactionValue) {
-               case zero:
+               case 'zero':
+                  console.log("Behind door number 0");
                   window.open("http://www.qa.apartmentguide.com" + listings[0].seo_path, '_blank');
                   break;
-               case one:
+               case 'one':
+                  console.log("Behind door number 1");
                   window.open("http://www.qa.apartmentguide.com" + listings[1].seo_path, '_blank');
                   break;
-               case two:
+               case 'two':
+                  console.log("Behind door number 2");
                   window.open("http://www.qa.apartmentguide.com" + listings[2].seo_path, '_blank');
                   break;
-               case three:
+               case 'three':
+                  console.log("Behind door number 3");
                   window.open("http://www.qa.apartmentguide.com" + listings[3].seo_path, '_blank');
                   break;
-               case four:
+               case 'four':
+                  console.log("Behind door number 4");
                   window.open("http://www.qa.apartmentguide.com" + listings[4].seo_path, '_blank');
                   break;
-               case five:
+               case 'five':
+                  console.log("Behind door number 5");
                   window.open("http://www.qa.apartmentguide.com" + listings[5].seo_path, '_blank');
                   break;
-               case six:
+               case 'six':
+                  console.log("Behind door number 6");
                   window.open("http://www.qa.apartmentguide.com" + listings[6].seo_path, '_blank');
                   break;
-               case seven:
+               case 'seven':
+                  console.log("Behind door number 7");
                   window.open("http://www.qa.apartmentguide.com" + listings[7].seo_path, '_blank');
                   break;
-               case eight:
+               case 'eight':
+                  console.log("Behind door number 8");
                   window.open("http://www.qa.apartmentguide.com" + listings[8].seo_path, '_blank');
                   break;
-               case nine:
+               case 'nine':
+                  console.log("Behind door number 9");
                   window.open("http://www.qa.apartmentguide.com" + listings[9].seo_path, '_blank');
                   break;
                default:
+                  console.log("Didn't try to open anything");
                   break;
             }
          }
