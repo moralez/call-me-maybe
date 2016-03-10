@@ -213,7 +213,7 @@ console.log("ZipCode: " + zipCode);
 		for(var i = 0; i < firstTenListings.length; i++) {
 			console.log("i: " + i);
 			var index = firstTenListings[i]
-			var individualListing = "Option " + i + ": " 
+			var individualListing = "Option " + determineEmojiForOption(i) + ": " 
 			if(index.name) {
 				individualListing = individualListing + index.name
 			} else {
@@ -271,6 +271,32 @@ console.log("ZipCode: " + zipCode);
 
 
 });
+
+function determineEmojiForOption(index) {
+	switch(index) {
+    case 0:
+        return ":zero:"
+    case 1:
+    	return ":one:"
+    case 2:
+    	return ":two:"
+	case 3:
+    return ":three:"
+    	case 4:
+    return ":four:"
+    	case 5: 
+    return ":five:"
+    	case 6:
+    return ":six:"
+    	case 7:
+    return ":seven:"
+    	case 8:
+    return ":eight:"
+    default:
+    	return ":nine:"
+	}
+}
+
 
 app.post('/roulette',function(req,res){
    var request=JSON.stringify(req.body);
