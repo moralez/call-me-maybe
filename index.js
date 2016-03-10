@@ -199,13 +199,25 @@ console.log("ZipCode: " + zipCode);
    		console.log("response: " + response);
    		
    		var responseBody = JSON.parse(body)
+   		
+   		//parse out first 10 listings
    		var listings = responseBody["listings"]
    		console.log("Listings" + listings);
+   		
+   		var firstTenListings = listings.splice(0, 9)
+   		console.log("First Ten Listings: " + firstTenListings);
+   		
+   		// var firstTenListings = []
+//    		var currIndex = 0;
+//    		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
+// 		while (firstTenListings.length < 10 && currIndex < listings.length) {
+// 		   var currListing = listings[0];
+// 		   currIndex++;
+// 		}
+   		res.end();
    		   		
    });
 
-//parse out first 10 listings
-//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
 
 
 });
