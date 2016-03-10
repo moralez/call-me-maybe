@@ -8,6 +8,7 @@ var url           = require('url');
 var bodyParser    = require("body-parser");
 var RtmClient     = require('@slack/client').RtmClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
+var RTM_EVENTS    = require('@slack/client').RTM_EVENTS;
 
 var rtm;
 
@@ -33,7 +34,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
       rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'debug'});
       rtm.start();
 
-      rtm.on(CLIENT_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
+      rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
          console.log("Reaction added:", reaction);
       });
     }
