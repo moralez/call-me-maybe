@@ -228,7 +228,7 @@ console.log("ZipCode: " + zipCode);
 			console.log("Individual Listing: " + individualListing);
 			
 			if (index.city || index.state) {
-				individualListing = individualListing + " in " + indexy.cty + index.st
+				individualListing = individualListing + " in " + index.cty + index.st
 			}
 			
 			individualListing = individualListing + "."
