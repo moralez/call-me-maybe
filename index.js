@@ -36,6 +36,10 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
 
       rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
          console.log("Reaction added:", reaction);
+         var REACTION_ID = reaction.item.channel + ":" + reaction.item.ts;
+         if (REACTION_ID == LAST_SEARCH_ID) {
+            console.log("We got a match!");
+         }
       });
     }
  });
