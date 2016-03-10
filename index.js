@@ -27,23 +27,6 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
  });
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
 
-
-client.on('connect', function() {
-   console.log('connected');
-
-   client.get('ACCESS_TOKEN', function(res) {
-      if (res) {
-         console.log("on " + res.toString()); // => should be crazy token
-      }
-   });
-
-   client.get('BOT_ACCESS_TOKEN', function(res) {
-      if (res) {
-         console.log("on " + res.toString()); // => should be crazy token
-      }
-   });
-});
-
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
