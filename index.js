@@ -11,6 +11,7 @@ var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 var RTM_EVENTS    = require('@slack/client').RTM_EVENTS;
 
 var rtm;
+var listings;
 
 client.auth(rtg.auth.split(":")[1]);
 
@@ -25,7 +26,6 @@ client.get("ACCESS_TOKEN", function(err, reply) {
  });
 console.log("ACCESS_TOKEN Set: " + ACCESS_TOKEN);
 
-
 client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
     console.log("Before " + reply);
@@ -39,6 +39,41 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
          var REACTION_ID = reaction.item.channel + ":" + reaction.item.ts;
          if (REACTION_ID == LAST_SEARCH_ID) {
             console.log("We got a match!");
+            var reactionValue = reaction.reaction;
+            switch (reactionValue) {
+               case zero:
+                  window.open("http://www.qa.apartmentguide.com" + listings[0].seo_path, '_blank');
+                  break;
+               case one:
+                  window.open("http://www.qa.apartmentguide.com" + listings[1].seo_path, '_blank');
+                  break;
+               case two:
+                  window.open("http://www.qa.apartmentguide.com" + listings[2].seo_path, '_blank');
+                  break;
+               case three:
+                  window.open("http://www.qa.apartmentguide.com" + listings[3].seo_path, '_blank');
+                  break;
+               case four:
+                  window.open("http://www.qa.apartmentguide.com" + listings[4].seo_path, '_blank');
+                  break;
+               case five:
+                  window.open("http://www.qa.apartmentguide.com" + listings[5].seo_path, '_blank');
+                  break;
+               case six:
+                  window.open("http://www.qa.apartmentguide.com" + listings[6].seo_path, '_blank');
+                  break;
+               case seven:
+                  window.open("http://www.qa.apartmentguide.com" + listings[7].seo_path, '_blank');
+                  break;
+               case eight:
+                  window.open("http://www.qa.apartmentguide.com" + listings[8].seo_path, '_blank');
+                  break;
+               case nine:
+                  window.open("http://www.qa.apartmentguide.com" + listings[9].seo_path, '_blank');
+                  break;
+               default:
+                  break;
+            }
          }
       });
     }
@@ -218,7 +253,7 @@ console.log("ZipCode: " + zipCode);
    		var responseBody = JSON.parse(body)
    		
    		//parse out first 10 listings
-   		var listings = responseBody["listings"]
+   		listings = responseBody["listings"]
    		console.log("Listings" + listings);
    		   
    		//parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
