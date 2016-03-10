@@ -235,24 +235,25 @@ console.log("ZipCode: " + zipCode);
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.beds) {
-				individualListing = individualListing + index.beds
+				individualListing = individualListing + index.beds + " beds" 
 			} 
 			
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.bhs) {
-				individualListing = individualListing + index.baths
+				individualListing = individualListing + index.baths + " baths" 
 			}
 			
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.prices) {
-				individualListing = individualListing + " with prices starting at " + index.prices + "."
+				individualListing = individualListing + " available with prices starting at " + index.prices + "."
 			} 
 			
 			
 			console.log("firstTenListings[index]: " + firstTenListings[i]);
 			messageText = messageText + individualListing + "\n";
+			console.log("Message Text: " + messageText);
 		}
 		
 		messageText = messageText + "\n\n Please select from options 0 - " + firstTenListings.length - 1 
