@@ -197,6 +197,10 @@ console.log("ZipCode: " + zipCode);
    		console.log("request body: "+ JSON.stringify(body));
    		console.log("err: " + err);
    		console.log("response: " + response);
+   		
+   		var listings = JSON.parse(response).listings
+   		console.log("Listings" + listings);
+   		   		
    });
 
 //parse out first 10 listings
