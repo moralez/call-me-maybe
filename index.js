@@ -219,32 +219,32 @@ console.log("ZipCode: " + zipCode);
 			} else {
 				individualListing = "This apartment "
 			}
-			console.log("Individual Listing: " individualListing);
+			console.log("Individual Listing: " + individualListing);
 			
 			individualListing = individualListing + "can be found " 
 			if(index.adr) {
 				individualListing = " at " + individualListing + index.adr
 			}
-			console.log("Individual Listing: " individualListing);
+			console.log("Individual Listing: " + individualListing);
 			
 			if (index.city || index.state) {
 				individualListing = individualListing + " in " + indexy.city + index.state 
 			}
 			
 			individualListing = individualListing + "."
-			console.log("Individual Listing: " individualListing);
+			console.log("Individual Listing: " + individualListing);
 			
 			if(index.beds) {
 				individualListing = individualListing + index.beds
 			} 
 			
-			console.log("Individual Listing: " individualListing);
+			console.log("Individual Listing: " + individualListing);
 			
 			if(index.bhs) {
 				individualListing = individualListing + index.bhs
 			}
 			
-			console.log("Individual Listing: " individualListing);
+			console.log("Individual Listing: " + individualListing);
 			
 			if(index.prices) {
 				individualListing = individualListing + " with prices starting at " + index.prices + "."
