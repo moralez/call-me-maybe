@@ -198,7 +198,7 @@ console.log("ZipCode: " + zipCode);
    		console.log("err: " + err);
    		console.log("response: " + response);
    		
-   		var response = JSON.parse(response)
+//    		var response = JSON.parse(response)
    		var listings = response.listings
    		console.log("Listings" + listings);
    		   		
