@@ -34,11 +34,15 @@ client.on('connect', function() {
     console.log('connected');
 
 	client.get('ACCESS_TOKEN', function(res) {
-	    console.log(res.toString()); // => should be crazy token
+		if (res) {
+	    	console.log(res.toString()); // => should be crazy token
+		}
 	});
 
     client.get('BOT_ACCESS_TOKEN', function(res) {
-	    console.log(res.toString()); // => should be crazy token
+    	if (res) {
+    		console.log(res.toString()); // => should be crazy token
+    	}
 	});
 });
 
