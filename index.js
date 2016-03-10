@@ -205,7 +205,7 @@ console.log("ZipCode: " + zipCode);
    		console.log("Listings" + listings);
    		
    		var firstTenListings = listings.splice(0, 10)
-   		console.log("First Ten Listings: " + firstTenListings);
+   		console.log("First Ten Listings: " + JSON.stringify(firstTenListings));
    
    		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
 		
