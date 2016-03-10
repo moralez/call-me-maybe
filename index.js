@@ -223,7 +223,7 @@ console.log("ZipCode: " + zipCode);
 			
 			individualListing = individualListing + " can be found " 
 			if(index.adr) {
-				individualListing = " at " + individualListing + index.adr
+				individualListing = individualListing + " at " +  index.adr
 			}
 			console.log("Individual Listing: " + individualListing);
 			
