@@ -5,7 +5,7 @@ var redis = require("redis");
 var rtg   = require("url").parse(process.env.REDISTOGO_URL);
 var client = require("redis").createClient(rtg.port, rtg.hostname);
 
-redis.auth(rtg.auth.split(":")[1]);
+client.auth(rtg.auth.split(":")[1]);
 
 var requestHelper = require('request');
 var express = require('express');
