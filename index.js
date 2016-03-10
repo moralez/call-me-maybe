@@ -211,6 +211,7 @@ console.log("ZipCode: " + zipCode);
 		
 		var messageText = "Here are ten listings at " + zipCode
 		for(var i = 0; i < firstTenListings.length; i++) {
+		console.log("i: " + i);
 			var individualListing = "Option " + i + " " + listing[i].name + "can be found at " + listing[i].adr + listing[i].city + listing[i].state + ". It has " + listing[i].beds + " beds, " + listing[i].bhs + "at " + listing[i].prices + ".";
 			console.log("Individual Listing Message: " + individualListing);
 			messageText = messageText + individualListing;
