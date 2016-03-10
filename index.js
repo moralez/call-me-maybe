@@ -20,30 +20,30 @@ var app            =        express();
 var ACCESS_TOKEN = client.get("ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
     console.log(reply);
-});
+ });
 console.log("ACCESS_TOKEN Set: " + ACCESS_TOKEN);
 
 var BOT_ACCESS_TOKEN = client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
     console.log(reply);
-});
+ });
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
 
 
 client.on('connect', function() {
-    console.log('connected');
+  console.log('connected');
 
-	client.get('ACCESS_TOKEN', function(res) {
-		if (res) {
-	    	console.log(res.toString()); // => should be crazy token
-		}
-	});
+  client.get('ACCESS_TOKEN', function(res) {
+    if (res) {
+            console.log(res.toString()); // => should be crazy token
+         }
+      });
 
-    client.get('BOT_ACCESS_TOKEN', function(res) {
-    	if (res) {
-    		console.log(res.toString()); // => should be crazy token
-    	}
-	});
+  client.get('BOT_ACCESS_TOKEN', function(res) {
+    if (res) {
+            console.log(res.toString()); // => should be crazy token
+         }
+      });
 });
 
 //Here we are configuring express to use body-parser as middle-ware.
@@ -58,41 +58,41 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-  response.render('pages/index');
+ response.render('pages/index');
 });
 
 app.get('/auth', function(request, response) {
    var url_parts = url.parse(request.url, true);
    if (request.query.code) {
       getKey(request.query.code)
-}
-response.render('pages/index');
+   }
+   response.render('pages/index');
 });
 
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+ console.log('Node app is running on port', app.get('port'));
 });
 
 function getKey(code) {
-  var headers = {
-    'User-Agent':       'Super Agent/0.0.1',
-    'Content-Type':     'application/x-www-form-urlencoded'
-  }
+ var headers = {
+  'User-Agent':       'Super Agent/0.0.1',
+  'Content-Type':     'application/x-www-form-urlencoded'
+}
 
-  var options = {
-    method: 'GET',
-    url: 'https://slack.com/api/oauth.access',
-    headers: headers,
-    qs: {
-      'client_id': '24999931810.25003305249',
-      'client_secret': '2ef373aad7fac39fdb54aceeae307039',
-      'code': code,
-      'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
-    }
-  }
+var options = {
+  method: 'GET',
+  url: 'https://slack.com/api/oauth.access',
+  headers: headers,
+  qs: {
+   'client_id': '24999931810.25003305249',
+   'client_secret': '2ef373aad7fac39fdb54aceeae307039',
+   'code': code,
+   'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
+}
+}
 
-  requestHelper(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
+requestHelper(options, function (error, response, body) {
+  if (!error && response.statusCode == 200) {
       // Print out the response body
       console.log("Body: " + body);
       var bodyJson = JSON.parse(body)
@@ -103,17 +103,17 @@ function getKey(code) {
          
          console.log("BodyJSON Tokens " + JSON.stringify(bodyJson));
          
-    
-		ACCESS_TOKEN = bodyJson.access_token;
-		BOT_ACCESS_TOKEN = bodyJson.bot.bot_access_token;
-		console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
-		client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
-		client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
+
+         ACCESS_TOKEN = bodyJson.access_token;
+         BOT_ACCESS_TOKEN = bodyJson.bot.bot_access_token;
+         console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
+         client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
+         client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
       }
       
       console.log("Response: " + response);
-    }
-  })
+   }
+})
 }
 
 // app.get('/test', function(req, res) {
@@ -134,16 +134,16 @@ function getKey(code) {
 // });
 
 app.get('/tokens', function(req, res) {
-	var tokenString = "";
-	client.get("ACCESS_TOKEN", function(err, reply) {
-		tokenString += reply.toString();
-    	console.log(res.toString()); // => should be crazy token
-    	client.get("BOT_ACCESS_TOKEN", function(err, reply) {
-			tokenString += " " + reply.toString();
-    		console.log(res.toString()); // => should be crazy token
-    		res.end("Result: " + tokenString);
-		});
-	});
+  var tokenString = "";
+  client.get("ACCESS_TOKEN", function(err, reply) {
+    tokenString += reply.toString();
+        console.log(res.toString()); // => should be crazy token
+        client.get("BOT_ACCESS_TOKEN", function(err, reply) {
+         tokenString += " " + reply.toString();
+            console.log(res.toString()); // => should be crazy token
+            res.end("Result: " + tokenString);
+         });
+     });
 })
 
 app.post('/checkins', function(req, res) {
@@ -161,22 +161,22 @@ app.post('/checkins', function(req, res) {
    // var userGroupObject = { token:ACCESS_TOKEN };
    // request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
    //    var convertedBody = JSON.parse(body);
-      
+
    //    console.log("converted body: " + JSON.stringify(convertedBody));
    //    console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
-      
+
    //    var usergroups = convertedBody["usergroups"];
    //    for (var i = 0; i < usergroups.length; i++) {
    //       var group = usergroups[i];
-         
+
    //       console.log("Comparing " + req.body.text + " to " + group["handle"]);
-         
+
    //       if (req.body.text == group.handle) {
 
    //          channelsToCheck = group.prefs.channels;
-            
+
    //          console.log("The magic ID is: " + group.id);
-            
+
    //          var blah = { token:ACCESS_TOKEN, usergroup:group.id };
    //          request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
    //             var users = JSON.parse(body)["users"];
@@ -205,57 +205,57 @@ app.post('/checkins', function(req, res) {
 });
 
 app.post('/roulette',function(req,res){
-  var request=JSON.stringify(req.body);
-  console.log("request = "+request);
+   var request=JSON.stringify(req.body);
+   console.log("request = "+request);
 
- var request = require('request');
-  var userGroupObject = { token:ACCESS_TOKEN };
-	request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-	   var convertedBody = JSON.parse(body);
+   var request = require('request');
 
-		console.log("converted body: " + JSON.stringify(convertedBody));
-		console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+   console.log("roulette - ACCESS_TOKEN: " + ACCESS_TOKEN);
+   var userGroupObject = { token:ACCESS_TOKEN };
+   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+   var convertedBody = JSON.parse(body);
 
-		var usergroups = convertedBody["usergroups"];
-		for (var i = 0; i < usergroups.length; i++) {
-		   var group = usergroups[i];
- 
-		   console.log("Comparing " + req.body.text + " to " + group["handle"]);
- 
-		   if (req.body.text == group.handle) {
-	
-			  console.log("The magic ID is: " + group.id);
-	
-			  var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-			  request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
-				 var users = JSON.parse(body)["users"];
-				 var rand = users[Math.floor(Math.random() * users.length)];
-	   
-				 console.log("random Member id: ", rand);
-	   
-				 var userInfo = { token:ACCESS_TOKEN, user:rand };
-				 request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
-					var user = JSON.parse(body)["user"];
-					var userName = user["name"];
-		  
-					console.log("User Name: ", userName);
-		  
-					var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
-					 request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-						   console.log("Finished sending postMessage");
-							res.end();
-					  });
-				 });
-			  });
-		   } else {
-			  console.log("You suck!");
-			  if (req.body.text == "") {
-				res.end("Please enter the roulette slash command via /roulette slackUserGroupName");
-			  } else {
-					res.end(req.body.text + " does not appear to be a valid usergroup.")
-				}
-		   } 
-		}
-	 })
+   console.log("converted body: " + JSON.stringify(convertedBody));
+   console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+
+   var usergroups = convertedBody["usergroups"];
+   for (var i = 0; i < usergroups.length; i++) {
+      var group = usergroups[i];
+
+      console.log("Comparing " + req.body.text + " to " + group["handle"]);
+
+      if (req.body.text == group.handle) {
+         console.log("The magic ID is: " + group.id);
+
+         var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+         request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+            var users = JSON.parse(body)["users"];
+            var rand = users[Math.floor(Math.random() * users.length)];
+
+            console.log("random Member id: ", rand);
+
+            var userInfo = { token:ACCESS_TOKEN, user:rand };
+            request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+               var user = JSON.parse(body)["user"];
+               var userName = user["name"];
+
+               console.log("User Name: ", userName);
+
+               var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
+               request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                  console.log("Finished sending postMessage");
+                  res.end();
+               });
+            });
+         });
+       } else {
+         console.log("You suck!");
+         if (req.body.text == "") {
+            res.end("Please enter the roulette slash command via /roulette slackUserGroupName");
+         } else {
+            res.end(req.body.text + " does not appear to be a valid usergroup.")
+         }
+      } 
+   }
+})
 });
-
