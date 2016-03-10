@@ -204,7 +204,7 @@ console.log("ZipCode: " + zipCode);
    		var listings = responseBody["listings"]
    		console.log("Listings" + listings);
    		
-   		var firstTenListings = listings.splice(0, 9)
+   		var firstTenListings = listings.splice(0, 10)
    		console.log("First Ten Listings: " + firstTenListings);
    		
    		// var firstTenListings = []
