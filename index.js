@@ -1,49 +1,47 @@
-var http = require('http');
-var fs = require("fs");
-var redis = require("redis");
-
-var rtg   = require("url").parse(process.env.REDISTOGO_URL);
-var client = require("redis").createClient(rtg.port, rtg.hostname);
+var http          = require('http');
+var rtg           = require("url").parse(process.env.REDISTOGO_URL);
+var client        = require("redis").createClient(rtg.port, rtg.hostname);
+var requestHelper = require('request');
+var express       = require('express');
+var app           = express();
+var url           = require('url');
+var bodyParser    = require("body-parser");
 
 client.auth(rtg.auth.split(":")[1]);
 
-var requestHelper = require('request');
-var express = require('express');
-var app = express();
-var url = require('url');
+var ACCESS_TOKEN = "";
+var BOT_ACCESS_TOKEN = "";
 
-var express        =        require("express");
-var bodyParser     =        require("body-parser");
-var app            =        express();
-
-
-var ACCESS_TOKEN = client.get("ACCESS_TOKEN", function(err, reply) {
+client.get("ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
-    console.log(reply);
+    console.log("Before " + reply);
+    ACCESS_TOKEN = reply;
  });
 console.log("ACCESS_TOKEN Set: " + ACCESS_TOKEN);
 
-var BOT_ACCESS_TOKEN = client.get("BOT_ACCESS_TOKEN", function(err, reply) {
+
+client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
-    console.log(reply);
+    console.log("Before " + reply);
+    BOT_ACCESS_TOKEN = reply
  });
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
 
 
 client.on('connect', function() {
-  console.log('connected');
+   console.log('connected');
 
-  client.get('ACCESS_TOKEN', function(res) {
-    if (res) {
-            console.log(res.toString()); // => should be crazy token
-         }
-      });
+   client.get('ACCESS_TOKEN', function(res) {
+      if (res) {
+         console.log("on " + res.toString()); // => should be crazy token
+      }
+   });
 
-  client.get('BOT_ACCESS_TOKEN', function(res) {
-    if (res) {
-            console.log(res.toString()); // => should be crazy token
-         }
-      });
+   client.get('BOT_ACCESS_TOKEN', function(res) {
+      if (res) {
+         console.log("on " + res.toString()); // => should be crazy token
+      }
+   });
 });
 
 //Here we are configuring express to use body-parser as middle-ware.
