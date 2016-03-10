@@ -209,11 +209,11 @@ console.log("ZipCode: " + zipCode);
    
    		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
 		
-		var messageText = "Here are ten listings at " + zipCode +"\n\n"
+		var messageText = "Here are ten listings at " + zipCode
 		for(var i = 0; i < firstTenListings.length; i++) {
 			var individualListing = "Option " + i + " " + listing[i].name + "can be found at " + listing[i].adr + listing[i].city + listing[i].state + ". It has " + listing[i].beds + " beds, " + listing[i].bhs + "at " + listing[i].prices + ".";
 			console.log("Individual Listing Message: " individualListing);
-			messageText = messageText + individualListing + "\n";
+			messageText = messageText + individualListing;
 		}
 		
    		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true };
