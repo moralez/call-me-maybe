@@ -6,6 +6,15 @@ var express       = require('express');
 var app           = express();
 var url           = require('url');
 var bodyParser    = require("body-parser");
+var RtmClient     = require('@slack/client').RtmClient;
+var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
+
+var rtm = new RtmClient(token, {logLevel: 'debug'});
+rtm.start();
+
+rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
+   console.log("Reaction added:", reaction);
+});
 
 client.auth(rtg.auth.split(":")[1]);
 
@@ -247,14 +256,11 @@ console.log("ZipCode: " + zipCode);
 		
 		messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) 
 		
-   		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true, parse: "full" };
-        request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-    		console.log("Finished sending postMessage");
-            res.end();
-        });
-   
-   		res.end();
-   		   		
+		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true, parse: "full" };
+      request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+ 		   console.log("Finished sending postMessage");
+         res.end();
+      });
    });
 
 
