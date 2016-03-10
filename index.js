@@ -207,7 +207,7 @@ console.log("ZipCode: " + zipCode);
    		var firstTenListings = listings.splice(0, 10)
    		console.log("First Ten Listings: " + JSON.stringify(firstTenListings));
    
-   		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
+   		//parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
 		
 		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
 		for(var i = 0; i < firstTenListings.length; i++) {
@@ -228,7 +228,7 @@ console.log("ZipCode: " + zipCode);
 			console.log("Individual Listing: " + individualListing);
 			
 			if (index.city || index.state) {
-				individualListing = individualListing + " in " + indexy.city + index.state 
+				individualListing = individualListing + " in " + indexy.cty + index.st
 			}
 			
 			individualListing = individualListing + "."
@@ -241,7 +241,7 @@ console.log("ZipCode: " + zipCode);
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.bhs) {
-				individualListing = individualListing + index.bhs
+				individualListing = individualListing + index.baths
 			}
 			
 			console.log("Individual Listing: " + individualListing);
