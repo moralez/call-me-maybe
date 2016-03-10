@@ -109,7 +109,6 @@ function getKey(code) {
 		console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
 		client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
 		client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
-
       }
       
       console.log("Response: " + response);
@@ -136,10 +135,10 @@ function getKey(code) {
 
 app.get('/tokens', function(req, res) {
 	var tokenString = "";
-	client.get('ACCESS_TOKEN', function(res) {
+	client.get("ACCESS_TOKEN", function(err, res) {
 		tokenString += res.toString();
     	console.log(res.toString()); // => should be crazy token
-    	client.get('BOT_ACCESS_TOKEN', function(res) {
+    	client.get("BOT_ACCESS_TOKEN", function(err, res) {
 			tokenString += " " + res.toString();
     		console.log(res.toString()); // => should be crazy token
     		res.end("Result: " + tokenString);
