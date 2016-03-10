@@ -11,10 +11,6 @@ var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 
 var rtm;
 
-rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
-   console.log("Reaction added:", reaction);
-});
-
 client.auth(rtg.auth.split(":")[1]);
 
 var ACCESS_TOKEN = "";
@@ -35,6 +31,10 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     if (BOT_ACCESS_TOKEN) {
       rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'debug'});
       rtm.start();
+
+      rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
+         console.log("Reaction added:", reaction);
+      });
     }
  });
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
