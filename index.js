@@ -89,7 +89,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             }
 
             if (option != -1) {
-               contactInformationText = listings[option].mgtconame;
+               contactInformationText = "Property Management: " + listings[option].mgtconame;
                contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
                contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
 
@@ -287,7 +287,7 @@ console.log("ZipCode: " + zipCode);
 		for(var i = 0; i < listings.length; i++) {
 			console.log("i: " + i);
 			var index = listings[i]
-			var individualListing = "Option " + determineEmojiForOption(i) + ": " 
+			var individualListing = determineEmojiForOption(i) + ": " 
 			if(index.name) {
 				individualListing = individualListing + index.name
 			} else {
@@ -316,9 +316,6 @@ console.log("ZipCode: " + zipCode);
 						
 			if(index.prices) {
 				individualListing = individualListing + " available with prices starting at " + index.prices + "."
-			} 
-			if (index.seo_path) {
-				individualListing = individualListing + " " + "http://www.qa.apartmentguide.com" + index.seo_path
 			}
 			
 			messageText = messageText + individualListing + "\n";
