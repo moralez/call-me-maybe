@@ -1,7 +1,7 @@
 var http = require('http');
 var fs = require("fs");
 var redis = require("redis");
-var client = redis.createClient('11040');
+var client = redis.createClient('11040', process.env.REDISTOGO_URL);
 
 
 var requestHelper = require('request');
