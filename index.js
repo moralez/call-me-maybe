@@ -135,11 +135,11 @@ function getKey(code) {
 
 app.get('/tokens', function(req, res) {
 	var tokenString = "";
-	client.get("ACCESS_TOKEN", function(err, res) {
-		tokenString += res.toString();
+	client.get("ACCESS_TOKEN", function(err, reply) {
+		tokenString += reply.toString();
     	console.log(res.toString()); // => should be crazy token
-    	client.get("BOT_ACCESS_TOKEN", function(err, res) {
-			tokenString += " " + res.toString();
+    	client.get("BOT_ACCESS_TOKEN", function(err, reply) {
+			tokenString += " " + reply.toString();
     		console.log(res.toString()); // => should be crazy token
     		res.end("Result: " + tokenString);
 		});
