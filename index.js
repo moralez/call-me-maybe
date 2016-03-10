@@ -40,50 +40,64 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
          if (REACTION_ID == LAST_SEARCH_ID) {
             console.log("We got a match!");
             var reactionValue = reaction.reaction;
+            var contactInformationText = "";
+            var option = -1;
             switch (reactionValue) {
                case 'zero':
                   console.log("Behind door number 0");
-                  window.open("http://www.qa.apartmentguide.com" + listings[0].seo_path, '_blank');
+                  option = 0;
                   break;
                case 'one':
                   console.log("Behind door number 1");
-                  window.open("http://www.qa.apartmentguide.com" + listings[1].seo_path, '_blank');
+                  option = 1;
                   break;
                case 'two':
                   console.log("Behind door number 2");
-                  window.open("http://www.qa.apartmentguide.com" + listings[2].seo_path, '_blank');
+                  option = 2;
                   break;
                case 'three':
                   console.log("Behind door number 3");
-                  window.open("http://www.qa.apartmentguide.com" + listings[3].seo_path, '_blank');
+                  option = 3;
                   break;
                case 'four':
                   console.log("Behind door number 4");
-                  window.open("http://www.qa.apartmentguide.com" + listings[4].seo_path, '_blank');
+                  option = 4;
                   break;
                case 'five':
                   console.log("Behind door number 5");
-                  window.open("http://www.qa.apartmentguide.com" + listings[5].seo_path, '_blank');
+                  option = 5;
                   break;
                case 'six':
                   console.log("Behind door number 6");
-                  window.open("http://www.qa.apartmentguide.com" + listings[6].seo_path, '_blank');
+                  option = 6;
                   break;
                case 'seven':
                   console.log("Behind door number 7");
-                  window.open("http://www.qa.apartmentguide.com" + listings[7].seo_path, '_blank');
+                  option = 7;
                   break;
                case 'eight':
                   console.log("Behind door number 8");
-                  window.open("http://www.qa.apartmentguide.com" + listings[8].seo_path, '_blank');
+                  option = 8;
                   break;
                case 'nine':
                   console.log("Behind door number 9");
-                  window.open("http://www.qa.apartmentguide.com" + listings[9].seo_path, '_blank');
+                  option = 9;
                   break;
                default:
                   console.log("Didn't try to open anything");
                   break;
+            }
+
+            if (option != -1) {
+               contactInformationText = listings[option].mgtconame;
+               contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
+               contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
+
+               var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user, text: contactInformationText, as_user: true, parse: "full" };
+               request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                  console.log("Finished sending postMessage");
+                  res.end();
+               });
             }
          }
       });
@@ -311,7 +325,7 @@ console.log("ZipCode: " + zipCode);
 			console.log("Message Text: " + messageText);
 		}
 		
-		messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) 
+		messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property";
 		
 		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
       request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
