@@ -1,7 +1,7 @@
 var http = require('http');
 var fs = require("fs");
 var redis = require("redis");
-var client = redis.createClient('11040', '127.0.0.1');
+var client = redis.createClient('11040');
 
 
 var requestHelper = require('request');
@@ -13,27 +13,19 @@ var express        =        require("express");
 var bodyParser     =        require("body-parser");
 var app            =        express();
 
-var accessFileString = require("./tokens.json");
 
-console.log("Tokens: " + accessFileString);
-console.log("Tokens: " + JSON.stringify(accessFileString));
+var ACCESS_TOKEN = client.get("ACCESS_TOKEN", function(err, reply) {
+    // reply is null when the key is missing
+    console.log(reply);
+});
+console.log("ACCESS_TOKEN Set: " + ACCESS_TOKEN);
 
-var ACCESS_TOKEN = "";
-if (accessFileString.hasOwnProperty("ACCESS_TOKEN")) {
-	console.log("Did set ACCESS_TOKEN: " + accessFileString.ACCESS_TOKEN);
-	ACCESS_TOKEN = accessFileString.ACCESS_TOKEN
-} else {
-    console.log("Didn't set ACCESS_TOKEN");
-}
+var BOT_ACCESS_TOKEN = client.get("BOT_ACCESS_TOKEN", function(err, reply) {
+    // reply is null when the key is missing
+    console.log(reply);
+});
+console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
 
-
-var BOT_ACCESS_TOKEN = ""
-if (accessFileString.hasOwnProperty("BOT_ACCESS_TOKEN")) {
-	console.log("Did set BOT_ACCESS_TOKEN: " + accessFileString.BOT_ACCESS_TOKEN);
-	BOT_ACCESS_TOKEN = accessFileString.BOT_ACCESS_TOKEN
-} else {
-    console.log("Didn't set BOT_ACCESS_TOKEN");
-}
 
 client.on('connect', function() {
     console.log('connected');
@@ -104,22 +96,13 @@ function getKey(code) {
          
          console.log("BodyJSON Tokens " + JSON.stringify(bodyJson));
          
-         var tokenJSON = {
-   				 ACCESS_TOKEN: bodyJson.access_token,
-   				 BOT_ACCESS_TOKEN : bodyJson.bot.bot_access_token
-		};
-
-		ACCESS_TOKEN = tokenJSON.ACCESS_TOKEN;
-		BOT_ACCESS_TOKEN = tokenJSON.BOT_ACCESS_TOKEN;
+    
+		ACCESS_TOKEN = bodyJson.access_token;
+		BOT_ACCESS_TOKEN = bodyJson.bot.bot_access_token;
 		console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
 		client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
 		client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
 
-        // fs.writeFileSync( "tokens.json", JSON.stringify( tokenJSON ), "utf8");
-        fs.writeFile('./tokens.json', JSON.stringify(tokenJSON), function (err) {
-           if (err) throw err;
-           console.log('It\'s saved!');
-        });
       }
       
       console.log("Response: " + response);
