@@ -235,13 +235,13 @@ console.log("ZipCode: " + zipCode);
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.beds) {
-				individualListing = individualListing + index.beds + " beds" 
+				individualListing = individualListing + " " + index.beds + " beds" 
 			} 
 			
 			console.log("Individual Listing: " + individualListing);
 			
 			if(index.bhs) {
-				individualListing = individualListing + index.baths + " baths" 
+				individualListing = individualListing + " " + index.baths + " baths" 
 			}
 			
 			console.log("Individual Listing: " + individualListing);
@@ -256,7 +256,7 @@ console.log("ZipCode: " + zipCode);
 			console.log("Message Text: " + messageText);
 		}
 		
-		messageText = messageText + "\n\n Please select from options 0 - " + firstTenListings.length - 1 
+		messageText = messageText + "\n\n Please select from options 0 - " + (firstTenListings.length - 1) 
 		
    		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true };
         request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
