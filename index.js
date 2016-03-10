@@ -201,6 +201,7 @@ app.post('/checkins', function(req, res) {
 app.post('/ag', function(req, res){
 //given zip code, parse out zip code from request
 var zipCode = req.body.text
+console.log("User ID: " + req.body.user_id)
 console.log("ZipCode: " + zipCode);
 
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
