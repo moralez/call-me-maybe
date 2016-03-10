@@ -249,6 +249,10 @@ console.log("ZipCode: " + zipCode);
 			if(index.prices) {
 				individualListing = individualListing + " available with prices starting at " + index.prices + "."
 			} 
+			if (index.seo_path) {
+				individualListing = individualListing + "http://m.qa.apartmentguide.com/" + index.seo_path
+			}
+			
 			
 			
 			console.log("firstTenListings[index]: " + firstTenListings[i]);
@@ -258,7 +262,7 @@ console.log("ZipCode: " + zipCode);
 		
 		messageText = messageText + "\n\n Please select from options 0 - " + (firstTenListings.length - 1) 
 		
-   		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true };
+   		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true, parse: "full" };
         request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
     		console.log("Finished sending postMessage");
             res.end();
