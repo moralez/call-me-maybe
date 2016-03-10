@@ -206,14 +206,22 @@ console.log("ZipCode: " + zipCode);
    		
    		var firstTenListings = listings.splice(0, 10)
    		console.log("First Ten Listings: " + firstTenListings);
-   		
-   		// var firstTenListings = []
-//    		var currIndex = 0;
-//    		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
-// 		while (firstTenListings.length < 10 && currIndex < listings.length) {
-// 		   var currListing = listings[0];
-// 		   currIndex++;
-// 		}
+   
+   		//parse out each of listings' city, state, bhs, beds, adr, photo, prices, name
+		
+		var messageText = "Here are ten listings at " + zipCode\n\n
+		for(var i = 0; i < firstTenListings.length; i++) {
+			var individualListing = "Option " + i + " " + listing[i].name + "can be found at " + listing[i].adr + listing[i].city + listing[i].state + ". It has " + listing[i].beds + " beds, " + listing[i].bhs + "at " + listing[i].prices + ".";
+			console.log("Individual Listing Message: " individualListing);
+			messageText = messageText + individualListing + "\n";
+		}
+		
+   		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true };
+        request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+    		console.log("Finished sending postMessage");
+            res.end();
+        });
+   
    		res.end();
    		   		
    });
