@@ -9,8 +9,7 @@ var bodyParser    = require("body-parser");
 var RtmClient     = require('@slack/client').RtmClient;
 var CLIENT_EVENTS = require('@slack/client').CLIENT_EVENTS;
 
-var rtm = new RtmClient(token, {logLevel: 'debug'});
-rtm.start();
+var rtm;
 
 rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
    console.log("Reaction added:", reaction);
@@ -33,8 +32,13 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     // reply is null when the key is missing
     console.log("Before " + reply);
     BOT_ACCESS_TOKEN = reply
+    if (BOT_ACCESS_TOKEN) {
+      rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'debug'});
+      rtm.start();
+    }
  });
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
+
 
 //Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
