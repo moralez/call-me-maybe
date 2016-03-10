@@ -211,13 +211,44 @@ console.log("ZipCode: " + zipCode);
 		
 		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
 		for(var i = 0; i < firstTenListings.length; i++) {
-		console.log("i: " + i);
-			var individualListing = "Option " + i + ": " + firstTenListings[i].name + "can be found at " + firstTenListings[i].adr + firstTenListings[i].city + firstTenListings[i].state + ". It has " + firstTenListings[i].beds + " beds, " + firstTenListings[i].bhs + "at " + firstTenListings[i].prices + ".";
+			console.log("i: " + i);
+			var index = firstTenListings[i]
+			var individualListing = "Option " + i + ": " 
+			if(index.name) {
+				individualListing = individualListing + index.name
+			} else {
+				individualListing = "This apartment "
+			}
+			
+			individualListing = individualListing + "can be found " 
+			if(index.adr) {
+				individualListing = " at " + individualListing + index.adr
+			}
+			
+			if (index.city || index.state) {
+				individualListing = individualListing + " in " + indexy.city + index.state 
+			}
+			
+			individualListing = individualListing + "."
+			
+			if(index.beds) {
+				individualListing = individualListing + index.beds
+			} 
+			
+			if(index.bhs) {
+				individualListing = individualListing + index.bhs
+			}
+			
+			if(index.prices) {
+				individualListing = individualListing + " with prices starting at " + index.prices + "."
+			} 
+			
+			
 			console.log("firstTenListings[index]: " + firstTenListings[i]);
 			messageText = messageText + individualListing + "\n";
 		}
 		
-		messageText = "\n\n Please select from options 0 - " + firstTenListings.length-1 
+		messageText = messageText + "\n\n Please select from options 0 - " + firstTenListings.length - 1 
 		
    		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true };
         request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
