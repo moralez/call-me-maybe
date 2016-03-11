@@ -291,10 +291,19 @@ app.post('/checkins', function(req, res) {
                      console.log("Body: " + body);
                      var parsedBody = JSON.parse(body)
                      var messages = parsedBody.messages
-                     console.log("Messages: " + JSON.stringify(messages))
+                     console.log("Messages: " + JSON.stringify(messages));
+
+                     var listOfUsers;
                      for(var i = 0; i < messages.length; i++) {
                       var userID = messages[i].user
                       console.log("userIDFromMessage: " + userID);
+
+                      var userInfo = { token:ACCESS_TOKEN, user:userID };
+                      requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+                        var parsedBody = JSON.parse(body);
+                        var name = parsedBody.first_name + " " + parsedBody.last_name;
+                        console.log("Parsed Name: " + name);
+                      });
                      }
                   });
                }
