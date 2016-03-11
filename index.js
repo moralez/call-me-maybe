@@ -269,7 +269,7 @@ app.post('/checkins', function(req, res) {
 
                var today8AM = new Date();
                console.log(today8AM)
-               today8AM.setHours(8);
+               today8AM.setHours(13);
                console.log(today8AM)
                today8AM.setMinutes(0);
                console.log(today8AM)
