@@ -416,7 +416,7 @@ requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err
 
   //req.body.user_id
   var parsedJson = JSON.parse(body);
-  var messageText = parsedJson.value.joke + ":chuck:";
+  var messageText =  ":chuck: " + parsedJson.value.joke;
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
 
