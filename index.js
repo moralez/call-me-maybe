@@ -341,19 +341,20 @@ function parseThroughListings(id, zipCode, page) {
 
          var emojis = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
          for (var emoji in emojis) {
+            console.log("Emoji: " + emoji);
             var reactionParams = { token:BOT_ACCESS_TOKEN, name:emoji, channel:responseBody.channel, timestamp:responseBody.message.ts };
             request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
                console.log("SHould have added " + emoji + " reaction");
             });
          }
 
-         // emojis.forEach(function logArrayElements(element, index, array) {
-         //    console.log(element);
-         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:element, channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //       console.log("SHould have added " + emoji + " reaction");
-         //    });
-         // });
+         emojis.forEach(function logArrayElements(element, index, array) {
+            console.log(element);
+            var reactionParams = { token:BOT_ACCESS_TOKEN, name:element, channel:responseBody.channel, timestamp:responseBody.message.ts };
+            request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
+               console.log("SHould have added " + emoji + " reaction");
+            });
+         });
       });
    });
 
