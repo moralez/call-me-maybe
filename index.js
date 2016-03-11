@@ -239,54 +239,54 @@ app.post('/checkins', function(req, res) {
    // checks for messages from those users in that time frame
    // returns lists of who has checked in and who has not
    // console.log("Request Body: " + JSON.stringify(req.body));
-   // var requestBody = JSON.parse(req.body);
+   var requestBody = JSON.parse(req.body);
 
-   // var channelsToCheck = [];
+   var channelsToCheck = [];
 
-   // var userGroupObject = { token:ACCESS_TOKEN };
-   // request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-   //    var convertedBody = JSON.parse(body);
+   var userGroupObject = { token:ACCESS_TOKEN };
+   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+      var convertedBody = JSON.parse(body);
 
-   //    console.log("converted body: " + JSON.stringify(convertedBody));
-   //    console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+      console.log("converted body: " + JSON.stringify(convertedBody));
+      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
 
-   //    var usergroups = convertedBody["usergroups"];
-   //    for (var i = 0; i < usergroups.length; i++) {
-   //       var group = usergroups[i];
+      var usergroups = convertedBody["usergroups"];
+      for (var i = 0; i < usergroups.length; i++) {
+         var group = usergroups[i];
 
-   //       console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         console.log("Comparing " + req.body.text + " to " + group["handle"]);
 
-   //       if (req.body.text == group.handle) {
+         if (req.body.text == group.handle) {
 
-   //          channelsToCheck = group.prefs.channels;
+            channelsToCheck = group.prefs.channels;
 
-   //          console.log("The magic ID is: " + group.id);
+            console.log("The magic ID is: " + group.id);
 
-   //          var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-   //          request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
-   //             var users = JSON.parse(body)["users"];
+            var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+            request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+               var users = JSON.parse(body)["users"];
 
-   //             var checkedInUsers = [];
+               var checkedInUsers = [];
 
-   //             for (var i = 0; i < channelsToCheck.length; i++) {
-   //                var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
-   //                request({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
-   //                   var messages = JSON.parse(body)["messages"];
-   //                   for (var message in messages) {
-   //                      var userId = message.user;
+               for (var i = 0; i < channelsToCheck.length; i++) {
+                  var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
+                  request({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
+                     var messages = JSON.parse(body)["messages"];
+                     for (var message in messages) {
+                        var userId = message.user;
 
-   //                      if (checkedInUsers.indexOf(userId) == -1) {
-   //                         checkedInUsers.push(userId);
-   //                      }
-   //                   }
-   //                });
-   //             }
+                        if (checkedInUsers.indexOf(userId) == -1) {
+                           checkedInUsers.push(userId);
+                        }
+                     }
+                  });
+               }
 
-   //             res.end("Checked in users: " + checkedInUsers.toString());
-   //          });
-   //       }
-   //    }
-   // });
+               res.end("Checked in users: " + checkedInUsers.toString());
+            });
+         }
+      }
+   });
 });
 
 function parseThroughListings(id, zipCode, page) {
