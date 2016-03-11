@@ -114,7 +114,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                  parseThroughListings(requestID, zipCode, ++currentPage)
                }
             } else {
-               addNextReaction(option);
+               addNextReaction(option, reaction.item.channel, reaction.item.ts);
             }
          }
       });
@@ -400,7 +400,7 @@ function parseThroughListings(id, zipCode, page) {
          //       });
          //    });
 
-         addNextReaction(-1);
+         addNextReaction(-1, responseBody.channel, responseBody.message.ts);
 
          // emojis.forEach(function logArrayElements(element, index, array) {
          //    console.log(element);
@@ -431,9 +431,9 @@ parseThroughListings(requestID, zipCode, currentPage)
 res.end();
 });
 
-function addNextReaction(previousIndex) {
+function addNextReaction(previousIndex, channel, timestamp) {
    var newIndex = previousIndex++;
-   var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[newIndex], channel:responseBody.channel, timestamp:responseBody.message.ts };
+   var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[newIndex], channel:channel, timestamp:timestamp };
    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
       console.log("Should have added " + emojis[newIndex] + " reaction");
    });
