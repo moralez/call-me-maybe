@@ -236,19 +236,39 @@ app.post('/checkins', function(req, res) {
    // get user group from input
    // gets list of users in the usergroup
    //parse through perferred channel of usergroup for each user in usergroup's message
-  
+   
    // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
    console.log("req: " + JSON.stringify(req.body));
-   var userGroupName = requestBody.text
-   console.log("userGroupName: " + userGroupName);
 
-    var getUsersParams = { token:ACCESS_TOKEN, usergroup: userGroupName };
-    requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
-      var usersInGroup = body.users
-      console.log("body: " + body);
-      console.log("usersInGroup: " + usersInGroup);
-    });
+   var userGroupObject = { token:ACCESS_TOKEN };
+   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+     var convertedBody = JSON.parse(body);
+
+     console.log("converted body: " + JSON.stringify(convertedBody));
+     console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+
+     var usergroups = convertedBody["usergroups"];
+     for (var i = 0; i < usergroups.length; i++) {
+      var group = usergroups[i];
+
+      console.log("Comparing " + req.body.text + " to " + group["handle"]);
+
+      if (req.body.text == group.handle) {
+       var getUsersParams = { token:ACCESS_TOKEN, usergroup: req.body.text };
+       requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
+        var usersInGroup = body.users
+        console.log("body: " + body);
+        console.log("usersInGroup: " + usersInGroup);
+      });
+       
+     }
+   }
+ });
+
+
+
+   
 
   
 });
