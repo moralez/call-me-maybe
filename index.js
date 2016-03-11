@@ -101,6 +101,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             }
 
             if (userId != itemUserId) {
+               consle.log("Not from bot");
                if (option != -1 && nextPage == false) {
                   contactInformationText = "Property Management: " + listings[option].mgtconame;
                   contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
@@ -114,6 +115,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                  parseThroughListings(requestID, zipCode, ++currentPage)
                }
             } else {
+               consle.log("Reaction from bot!");
                addNextReaction(option, reaction.item.channel, reaction.item.ts);
             }
          }
@@ -432,7 +434,9 @@ res.end();
 });
 
 function addNextReaction(previousIndex, channel, timestamp) {
+   console.log("Previous Index: " + previousIndex)
    var newIndex = previousIndex++;
+   console.log("New Index: " + newIndex);
    var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[newIndex], channel:channel, timestamp:timestamp };
    requestHelper({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
       console.log("Should have added " + emojis[newIndex] + " reaction");
