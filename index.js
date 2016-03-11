@@ -279,8 +279,10 @@ app.post('/checkins', function(req, res) {
                          checkedInUsers.push(userId);
                        }
                      }
+                   });
 
-                     var userParams = { token:ACCESS_TOKEN };
+                  for(var i = 0; i < checkedInUsers.length; i++) {} 
+                     var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
                      requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
                        var userName = JSON.parse(body)["user"].name;
                        console.log("USERNAME: " + userName);
@@ -295,8 +297,8 @@ app.post('/checkins', function(req, res) {
                          console.log("check in body: " + body);
                        });
                      });
+                  }
 
-                   });
                 }
 
                res.end("Checked in users: " + checkedInUsers.toString());
