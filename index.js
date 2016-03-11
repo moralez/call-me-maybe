@@ -12,6 +12,9 @@ var RTM_EVENTS    = require('@slack/client').RTM_EVENTS;
 
 var rtm;
 var listings;
+var zipCode;
+var totalPages;
+var currentPage;
 
 client.auth(rtg.auth.split(":")[1]);
 
@@ -42,6 +45,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             var reactionValue = reaction.reaction;
             var contactInformationText = "";
             var option = -1;
+            var nextPage = false
             switch (reactionValue) {
                case 'zero':
                   console.log("Behind door number 0");
@@ -83,12 +87,15 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                   console.log("Behind door number 9");
                   option = 9;
                   break;
-               default:
+                case 'arrow_right': 
+                  nextPage = true
+                  break;
+                default:
                   console.log("Didn't try to open anything");
                   break;
             }
 
-            if (option != -1) {
+            if (option != -1 && nextPage == false) {
                contactInformationText = "Property Management: " + listings[option].mgtconame;
                contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
                contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
@@ -98,6 +105,8 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                   console.log("Finished sending postMessage");
                   res.end();
                });
+            } else if (nextPage) {
+              parseThroughListings(zipCode, currentPage++)
             }
          }
       });
@@ -264,69 +273,64 @@ app.post('/checkins', function(req, res) {
    // });
 });
 
-app.post('/ag', function(req, res){
-//given zip code, parse out zip code from request
-var zipCode = req.body.text
-console.log("User ID: " + req.body.user_id)
-console.log("ZipCode: " + zipCode);
-
+function parseThroughListings(zipCode, currentPage) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
-	var zipCodeObject = { query:zipCode, per_page: 10, page: 1 };
-	var request = require('request');
+  var zipCodeObject = { query:zipCode, per_page: 10, page: currentPage};
+  var request = require('request');
    request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
 
-   		var responseBody = JSON.parse(body)
-   		
-   		//parse out first 10 listings
-   		listings = responseBody["listings"]
-   		console.log("Listings" + listings);
-   		   
-   		//parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
-		
-		var messageText = "Here are ten listings at " + zipCode + ":\n\n"
-		for(var i = 0; i < listings.length; i++) {
-			console.log("i: " + i);
-			var index = listings[i]
-			var individualListing = determineEmojiForOption(i) + ": " 
-			if(index.name) {
-				individualListing = individualListing + index.name
-			} else {
-				individualListing = "This apartment "
-			}
-			
-			individualListing = individualListing + " can be found " 
-			if(index.adr) {
-				individualListing = individualListing + " at " +  index.adr
-			}
-			
-			if (index.cty || index.st) {
-				individualListing = individualListing + " in " + index.cty + ", " + index.st
-			}
-			
-			individualListing = individualListing + "."
-			
-			if(index.beds) {
-				individualListing = individualListing + " " + index.beds + " beds" 
-			} 
-			
-			
-			if(index.bhs) {
-				individualListing = individualListing + " " + index.baths + " baths" 
-			}
-						
-			if(index.prices) {
-				individualListing = individualListing + " available with prices starting at " + index.prices + "."
-			}
-			
-			messageText = messageText + individualListing + "\n";
-			console.log("Message Text: " + messageText);
-		}
-		
-		messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property";
-		
-		var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
+      var responseBody = JSON.parse(body)
+      
+      //parse out first 10 listings
+      listings = responseBody["listings"]
+      console.log("Listings" + listings);
+         
+      //parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
+    
+    var messageText = "Here are ten listings at " + zipCode + ":\n\n"
+    for(var i = 0; i < listings.length; i++) {
+      console.log("i: " + i);
+      var index = listings[i]
+      var individualListing = determineEmojiForOption(i) + ": " 
+      if(index.name) {
+        individualListing = individualListing + index.name
+      } else {
+        individualListing = "This apartment "
+      }
+      
+      individualListing = individualListing + " can be found " 
+      if(index.adr) {
+        individualListing = individualListing + " at " +  index.adr
+      }
+      
+      if (index.cty || index.st) {
+        individualListing = individualListing + " in " + index.cty + ", " + index.st
+      }
+      
+      individualListing = individualListing + "."
+      
+      if(index.beds) {
+        individualListing = individualListing + " " + index.beds + " beds" 
+      } 
+      
+      
+      if(index.bhs) {
+        individualListing = individualListing + " " + index.baths + " baths" 
+      }
+            
+      if(index.prices) {
+        individualListing = individualListing + " available with prices starting at " + index.prices + "."
+      }
+      
+      messageText = messageText + individualListing + "\n";
+      console.log("Message Text: " + messageText);
+    }
+    
+    messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property";
+    
+    var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
       request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
- 		   console.log("Finished sending postMessage");
+       console.log("Finished sending postMessage");
          var responseBody = JSON.parse(body)
          LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
          console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
@@ -335,6 +339,17 @@ console.log("ZipCode: " + zipCode);
    });
 
 
+}
+
+app.post('/ag', function(req, res){
+//given zip code, parse out zip code from request
+zipCode = req.body.text
+totalPages = req.body.total_pages
+currentPage = 1
+console.log("User ID: " + req.body.user_id)
+console.log("ZipCode: " + zipCode);
+
+parseThroughListings(zipCode, 0)
 
 });
 
