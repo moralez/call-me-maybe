@@ -409,6 +409,17 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 }
 
+app.post('/chuck', function(req, res) {
+var zipCodeObject = { exclude:[explicit]};
+requestHelper({url:"http://api.icndb.com/jokes/random", qs:zipCodeObject}, function(err, response, body) {
+  var parsedBody = JSON.parse(body);
+  console.log("ParsedBody: " + parsedBody);
+
+});
+
+});
+
+
 app.post('/ag', function(req, res){
 //given zip code, parse out zip code from request
 zipCode = req.body.text
