@@ -301,19 +301,23 @@ app.post('/checkins', function(req, res) {
                         var name = body.user.name
                         console.log("Parsed Name: " + name);
                         listOfUsers = listOfUsers + name
-                      });
-                    }
 
-                    var onlineUsersMessage;
-                    for (var i = 0; i < listOfUsers.length; i++) {
-                      onlineUsersMessage = listOfUsers[i] + " is online. \n"
-                    }
+                        var onlineUsersMessage;
+                        for (var i = 0; i < listOfUsers.length; i++) {
+                          onlineUsersMessage = listOfUsers[i] + " is online. \n"
+                        }
 
                      // req.body.user_id
                      var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: onlineUsersMessage, as_user: true, parse: "full" };
                      requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
 
                      });
+
+                     
+                   });
+}
+
+                    
                   });
                }
 
