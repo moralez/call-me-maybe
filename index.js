@@ -53,81 +53,81 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             var nextPage = false
             switch (reactionValue) {
                case 'zero':
-                  console.log("Behind door number 0");
-                  option = 0;
-                  break;
+               console.log("Behind door number 0");
+               option = 0;
+               break;
                case 'one':
-                  console.log("Behind door number 1");
-                  option = 1;
-                  break;
+               console.log("Behind door number 1");
+               option = 1;
+               break;
                case 'two':
-                  console.log("Behind door number 2");
-                  option = 2;
-                  break;
+               console.log("Behind door number 2");
+               option = 2;
+               break;
                case 'three':
-                  console.log("Behind door number 3");
-                  option = 3;
-                  break;
+               console.log("Behind door number 3");
+               option = 3;
+               break;
                case 'four':
-                  console.log("Behind door number 4");
-                  option = 4;
-                  break;
+               console.log("Behind door number 4");
+               option = 4;
+               break;
                case 'five':
-                  console.log("Behind door number 5");
-                  option = 5;
-                  break;
+               console.log("Behind door number 5");
+               option = 5;
+               break;
                case 'six':
-                  console.log("Behind door number 6");
-                  option = 6;
-                  break;
+               console.log("Behind door number 6");
+               option = 6;
+               break;
                case 'seven':
-                  console.log("Behind door number 7");
-                  option = 7;
-                  break;
+               console.log("Behind door number 7");
+               option = 7;
+               break;
                case 'eight':
-                  console.log("Behind door number 8");
-                  option = 8;
-                  break;
+               console.log("Behind door number 8");
+               option = 8;
+               break;
                case 'nine':
-                  console.log("Behind door number 9");
-                  option = 9;
-                  break;
-                case 'arrow_right': 
-                  nextPage = true
-                  break;
-                default:
-                  console.log("Didn't try to open anything");
-                  break;
+               console.log("Behind door number 9");
+               option = 9;
+               break;
+               case 'arrow_right': 
+               nextPage = true
+               break;
+               default:
+               console.log("Didn't try to open anything");
+               break;
             }
 
             if (userId != itemUserId) {
                console.log("Not from bot");
                if (option != -1 && nextPage == false) {
                   if(listings[option].mgtconame) {
-                    contactInformationText = "Property Management: " + listings[option].mgtconame;
-                  }
-                  if(listings[option].formatted_mdot_phn) {
-                     contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
-                  }
-                  if(listings[option].seo_path) {
-                    contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
-                  }
-
-                  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
-                  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-                     console.log("Finished sending postMessage");
-                  });
-               } else if (nextPage) {
-                 parseThroughListings(requestID, zipCode, ++currentPage)
+                   contactInformationText = "Property Management: " + listings[option].mgtconame;
+                }
+                if(listings[option].formatted_mdot_phn) {
+                  contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
                }
-            } else {
-               console.log("Reaction from bot!");
-               addNextReaction(option, reaction.item.channel, reaction.item.ts);
-            }
-         }
-      });
-    }
- });
+               if(listings[option].seo_path) {
+                contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
+             }
+
+             var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
+             requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+               console.log("Finished sending postMessage");
+            });
+          } else if (nextPage) {
+             parseThroughListings(requestID, zipCode, ++currentPage)
+          }
+       } else {
+         console.log("Reaction from bot!");
+         addNextReaction(option, reaction.item.channel, reaction.item.ts);
+      }
+   }
+});
+   }
+});
 console.log("BOT_ACCESS_TOKEN Set: " + BOT_ACCESS_TOKEN);
 
 
@@ -143,7 +143,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
- response.render('pages/index');
+  response.render('pages/index');
 });
 
 app.get('/auth', function(request, response) {
@@ -155,29 +155,29 @@ app.get('/auth', function(request, response) {
 });
 
 app.listen(app.get('port'), function() {
- console.log('Node app is running on port', app.get('port'));
+  console.log('Node app is running on port', app.get('port'));
 });
 
 function getKey(code) {
- var headers = {
-  'User-Agent':       'Super Agent/0.0.1',
-  'Content-Type':     'application/x-www-form-urlencoded'
-}
+  var headers = {
+    'User-Agent':       'Super Agent/0.0.1',
+    'Content-Type':     'application/x-www-form-urlencoded'
+ }
 
-var options = {
-  method: 'GET',
-  url: 'https://slack.com/api/oauth.access',
-  headers: headers,
-  qs: {
-   'client_id': '24999931810.25003305249',
-   'client_secret': '2ef373aad7fac39fdb54aceeae307039',
-   'code': code,
-   'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
-}
+ var options = {
+    method: 'GET',
+    url: 'https://slack.com/api/oauth.access',
+    headers: headers,
+    qs: {
+      'client_id': '24999931810.25003305249',
+      'client_secret': '2ef373aad7fac39fdb54aceeae307039',
+      'code': code,
+      'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
+   }
 }
 
 requestHelper(options, function (error, response, body) {
-  if (!error && response.statusCode == 200) {
+ if (!error && response.statusCode == 200) {
       // Print out the response body
       console.log("Body: " + body);
       var bodyJson = JSON.parse(body)
@@ -219,9 +219,9 @@ requestHelper(options, function (error, response, body) {
 // });
 
 app.get('/tokens', function(req, res) {
-  var tokenString = "";
-  client.get("ACCESS_TOKEN", function(err, reply) {
-    tokenString += reply.toString();
+ var tokenString = "";
+ client.get("ACCESS_TOKEN", function(err, reply) {
+  tokenString += reply.toString();
         console.log(res.toString()); // => should be crazy token
         client.get("BOT_ACCESS_TOKEN", function(err, reply) {
          tokenString += " " + reply.toString();
@@ -243,102 +243,97 @@ app.post('/checkins', function(req, res) {
 
    var userGroupObject = { token:ACCESS_TOKEN };
    requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-     var convertedBody = JSON.parse(body);
+      var convertedBody = JSON.parse(body);
 
-     console.log("converted body: " + JSON.stringify(convertedBody));
-     console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+      console.log("converted body: " + JSON.stringify(convertedBody));
+      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
 
-     var usergroups = convertedBody["usergroups"];
-     for (var i = 0; i < usergroups.length; i++) {
-      var group = usergroups[i];
+      var usergroups = convertedBody["usergroups"];
+      for (var i = 0; i < usergroups.length; i++) {
+         var group = usergroups[i];
 
-      console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         console.log("Comparing " + req.body.text + " to " + group["handle"]);
 
-      if (req.body.text == group.handle) {
-       var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
-       requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
-        var parsedBody = JSON.parse(body);
-        var usersInGroup = parsedBody.users
-        console.log("body: " + JSON.stringify(parsedBody));
-        console.log("usersInGroup: " + usersInGroup);
-      });
+         if (req.body.text == group.handle) {
+            var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
+            requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
+               var parsedBody = JSON.parse(body);
+               var usersInGroup = parsedBody.users
+               console.log("body: " + JSON.stringify(parsedBody));
+               console.log("usersInGroup: " + usersInGroup);
 
-     }
-   }
- });
-
-
-
-   
-
-  
+               res.end();
+            });
+         }
+      }
+   });  
 });
 
 function parseThroughListings(id, zipCode, page) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
-  var zipCodeObject = { query:zipCode, per_page: 10, page: page};
-   requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
+var zipCodeObject = { query:zipCode, per_page: 10, page: page};
+requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
 
-      var responseBody = JSON.parse(body)
-      
+   var responseBody = JSON.parse(body)
+
       //parse out first 10 listings
       listings = responseBody["listings"]
       console.log("Listings" + listings);
-         
+
       //parse out each of listings' cty, st, baths, beds, adr, photo, prices, name
-    
-    var messageText = "Here are ten listings at " + zipCode + ":\n\n"
-    for(var i = 0; i < listings.length; i++) {
-      console.log("i: " + i);
-      var index = listings[i]
-      var individualListing = determineEmojiForOption(i) + ": " 
-      if(index.name) {
-        individualListing = individualListing + index.name
-      } else {
-        individualListing = "This apartment "
-      }
-      
-      individualListing = individualListing + " can be found " 
-      if(index.adr) {
-        individualListing = individualListing + " at " +  index.adr
-      }
-      
-      if (index.cty || index.st) {
-        individualListing = individualListing + " in " + index.cty + ", " + index.st
-      }
-      
-      individualListing = individualListing + "."
-      
-      if(index.beds) {
-        individualListing = individualListing + " " + index.beds + " beds" 
-      } 
-      
-      
-      if(index.bhs) {
-        individualListing = individualListing + " " + index.baths + " baths" 
-      }
-            
-      if(index.prices) {
-        individualListing = individualListing + " available with prices starting at " + index.prices + "."
-      }
-      
-      messageText = messageText + individualListing + "\n";
-      console.log("Message Text: " + messageText);
+
+      var messageText = "Here are ten listings at " + zipCode + ":\n\n"
+      for(var i = 0; i < listings.length; i++) {
+         console.log("i: " + i);
+         var index = listings[i]
+         var individualListing = determineEmojiForOption(i) + ": " 
+         if(index.name) {
+          individualListing = individualListing + index.name
+       } else {
+          individualListing = "This apartment "
+       }
+
+       individualListing = individualListing + " can be found " 
+       if(index.adr) {
+          individualListing = individualListing + " at " +  index.adr
+       }
+
+       if (index.cty || index.st) {
+          individualListing = individualListing + " in " + index.cty + ", " + index.st
+       }
+
+       individualListing = individualListing + "."
+
+       if(index.beds) {
+          individualListing = individualListing + " " + index.beds + " beds" 
+       } 
+
+
+       if(index.bhs) {
+          individualListing = individualListing + " " + index.baths + " baths" 
+       }
+
+       if(index.prices) {
+          individualListing = individualListing + " available with prices starting at " + index.prices + "."
+       }
+
+       messageText = messageText + individualListing + "\n";
+       console.log("Message Text: " + messageText);
     }
     
     messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property.\n\n"
     messageText = messageText + "Please add the reaction :arrow_right: to go the next page of results.";
     
     var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
-      requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-       console.log("Finished sending postMessage");
-         var responseBody = JSON.parse(body)
-         LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
-         console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
-         
-         addNextReaction(-1, responseBody.channel, responseBody.message.ts);
-      });
-   });
+    requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+     console.log("Finished sending postMessage");
+     var responseBody = JSON.parse(body)
+     LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
+     console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
+
+     addNextReaction(-1, responseBody.channel, responseBody.message.ts);
+  });
+ });
 
 
 }
@@ -369,27 +364,27 @@ function addNextReaction(previousIndex, channel, timestamp) {
 
 function determineEmojiForOption(index) {
 	switch(index) {
-    case 0:
-        return ":zero:"
-    case 1:
-    	return ":one:"
-    case 2:
-    	return ":two:"
-	case 3:
-    return ":three:"
-    	case 4:
-    return ":four:"
-    	case 5: 
-    return ":five:"
-    	case 6:
-    return ":six:"
-    	case 7:
-    return ":seven:"
-    	case 8:
-    return ":eight:"
-    default:
-    	return ":nine:"
-	}
+     case 0:
+     return ":zero:"
+     case 1:
+     return ":one:"
+     case 2:
+     return ":two:"
+     case 3:
+     return ":three:"
+     case 4:
+     return ":four:"
+     case 5: 
+     return ":five:"
+     case 6:
+     return ":six:"
+     case 7:
+     return ":seven:"
+     case 8:
+     return ":eight:"
+     default:
+     return ":nine:"
+  }
 }
 
 
@@ -400,49 +395,49 @@ app.post('/roulette',function(req,res){
    console.log("roulette - ACCESS_TOKEN: " + ACCESS_TOKEN);
    var userGroupObject = { token:ACCESS_TOKEN };
    requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-   var convertedBody = JSON.parse(body);
+      var convertedBody = JSON.parse(body);
 
-   console.log("converted body: " + JSON.stringify(convertedBody));
-   console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+      console.log("converted body: " + JSON.stringify(convertedBody));
+      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
 
-   var usergroups = convertedBody["usergroups"];
-   for (var i = 0; i < usergroups.length; i++) {
-      var group = usergroups[i];
+      var usergroups = convertedBody["usergroups"];
+      for (var i = 0; i < usergroups.length; i++) {
+         var group = usergroups[i];
 
-      console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         console.log("Comparing " + req.body.text + " to " + group["handle"]);
 
-      if (req.body.text == group.handle) {
-         console.log("The magic ID is: " + group.id);
+         if (req.body.text == group.handle) {
+            console.log("The magic ID is: " + group.id);
 
-         var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-         requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
-            var users = JSON.parse(body)["users"];
-            var rand = users[Math.floor(Math.random() * users.length)];
+            var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+            requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+               var users = JSON.parse(body)["users"];
+               var rand = users[Math.floor(Math.random() * users.length)];
 
-            console.log("random Member id: ", rand);
+               console.log("random Member id: ", rand);
 
-            var userInfo = { token:ACCESS_TOKEN, user:rand };
-            requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
-               var user = JSON.parse(body)["user"];
-               var userName = user["name"];
+               var userInfo = { token:ACCESS_TOKEN, user:rand };
+               requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+                  var user = JSON.parse(body)["user"];
+                  var userName = user["name"];
 
-               console.log("User Name: ", userName);
+                  console.log("User Name: ", userName);
 
-               var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
-               requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-                  console.log("Finished sending postMessage");
-                  res.end();
+                  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
+                  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                     console.log("Finished sending postMessage");
+                     res.end();
+                  });
                });
             });
-         });
-       } else {
-         console.log("You suck!");
-         if (req.body.text == "") {
-            res.end("Please enter the roulette slash command via /roulette slackUserGroupName");
          } else {
-            res.end(req.body.text + " does not appear to be a valid usergroup.")
-         }
-      } 
-   }
-})
+            console.log("You suck!");
+            if (req.body.text == "") {
+               res.end("Please enter the roulette slash command via /roulette slackUserGroupName");
+            } else {
+               res.end(req.body.text + " does not appear to be a valid usergroup.")
+            }
+         } 
+      }
+   })
 });
