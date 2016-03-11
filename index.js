@@ -279,6 +279,7 @@ app.post('/checkins', function(req, res) {
 
                for (var i = 0; i < prefChannels.length; i++) {
                   var preferredChannelId = prefChannels[i];
+                  console.log("Preferred Channel Id: " + preferredChannelId);
                   var channelHistoryParams = { token:ACCESS_TOKEN, channel:preferredChannelId, oldest:today8AM.getTime(), latest:today1115AM.getTime() };
                   requestHelper({url:"https://slack.com/api/channels.history", qs:getUsersParams}, function(err, response, body) {
                      console.log("Body: " + body);
