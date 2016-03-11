@@ -288,19 +288,24 @@ app.post('/checkins', function(req, res) {
                      var messages = parsedBody.messages
                      console.log("Messages: " + JSON.stringify(messages));
 
-                     var listOfUsers;
+                     var listOfUsers = [];
+                     var checkedInUserIds = [];
                      for(var i = 0; i < messages.length; i++) {
                       var userID = messages[i].user
                       console.log("userIDFromMessage: " + userID);
 
-                      var userInfo = { token:ACCESS_TOKEN, user:userID };
+                      if (checkedInUserIds.indexof(userID) == -1) {
+                        var userInfo = { token:ACCESS_TOKEN, user:userID };
                       requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
                         console.log("Body: " + body);
-                        var body = JSON.parse(body)
+                        var body = JSON.parse(body);
                         console.log("Body.user" + JSON.stringify(body.user));
-                        var name = body.user.name
+                        var name = body.user.name;
+
                         console.log("Parsed Name: " + name);
-                        listOfUsers = listOfUsers + name
+
+                        listOfUsers.push(name);
+                        checkedInUserIds.push(name);
 
                         var onlineUsersMessage;
                         for (var i = 0; i < listOfUsers.length; i++) {
@@ -313,8 +318,9 @@ app.post('/checkins', function(req, res) {
 
                      });
 
-                     
+
                    });
+                      };
 }
 
                     
