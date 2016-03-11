@@ -294,7 +294,7 @@ app.post('/checkins', function(req, res) {
                       var userID = messages[i].user
                       console.log("userIDFromMessage: " + userID);
 
-                      if (checkedInUserIds.indexof(userID) == -1) {
+                      if (checkedInUserIds.indexOf(userID) == -1) {
                         var userInfo = { token:ACCESS_TOKEN, user:userID };
                       requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
                         console.log("Body: " + body);
