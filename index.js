@@ -259,7 +259,7 @@ app.post('/checkins', function(req, res) {
        requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
         var parsedBody = JSON.parse(body);
         var usersInGroup = parsedBody.users
-        console.log("body: " + parsedBody);
+        console.log("body: " + JSON.stringify(parsedBody));
         console.log("usersInGroup: " + usersInGroup);
       });
 
