@@ -101,7 +101,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
             }
 
             if (userId != itemUserId) {
-               consle.log("Not from bot");
+               console.log("Not from bot");
                if (option != -1 && nextPage == false) {
                   contactInformationText = "Property Management: " + listings[option].mgtconame;
                   contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
@@ -115,7 +115,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                  parseThroughListings(requestID, zipCode, ++currentPage)
                }
             } else {
-               consle.log("Reaction from bot!");
+               console.log("Reaction from bot!");
                addNextReaction(option, reaction.item.channel, reaction.item.ts);
             }
          }
