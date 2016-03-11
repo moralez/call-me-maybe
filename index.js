@@ -313,10 +313,8 @@ app.post('/checkins', function(req, res) {
 
                       listOfUsers.push(name);
                     });
-                  };
-                }
 
-                // make online message for channel
+                     // make online message for channel
                 var onlineUsersMessage = "List of Users Online: \n";
                 for (var i = 0; i < listOfUsers.length; i++) {
                   onlineUsersMessage = listOfUsers[i] + " is online. \n"
@@ -329,6 +327,10 @@ app.post('/checkins', function(req, res) {
                requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
 
                });
+                  };
+                }
+
+               
 
 
              });
