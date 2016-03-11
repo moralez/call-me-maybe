@@ -280,25 +280,26 @@ app.post('/checkins', function(req, res) {
                        }
                      }
                    });
-                  
-                    for(var i = 0; i < checkedInUsers.length; i++) { 
-                     var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
-                     requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
-                       var userName = JSON.parse(body)["user"].name;
-                       console.log("USERNAME: " + userName);
-                       var messageText = userName + "has checked in."
-                       console.log("messageText: " + messageText);
 
-                       var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true};
-                       requestHelper({url:"https://slack.com/api/chat.postMessage", qs:userParams}, function(err, response, body) {
-                         console.log(userParams);
-                         console.log("check in error: " + err)
-                         console.log("check in response: " + response)
-                         console.log("check in body: " + body);
-                       });
-                     });
-                  }
-                }
+                  for(var i = 0; i < checkedInUsers.length; i++) { 
+                   var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
+                   console.log("Checked in user id: " + checkedInUsers[i])
+                   requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
+                     var userName = JSON.parse(body)["user"].name;
+                     console.log("USERNAME: " + userName);
+                     var messageText = userName + "has checked in."
+                     console.log("messageText: " + messageText);
+                   }
+                   var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true};
+                   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:userParams}, function(err, response, body) {
+                     console.log(userParams);
+                     console.log("check in error: " + err)
+                     console.log("check in response: " + response)
+                     console.log("check in body: " + body);
+                   });
+                 });
+                   
+                 }
 
                // res.end("Checked in users: " + checkedInUsers.toString());
             });
