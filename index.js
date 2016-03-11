@@ -315,7 +315,7 @@ app.post('/checkins', function(req, res) {
            // make online message for channel
                 var onlineUsersMessage = "List of Users Online: \n";
                 for (var i = 0; i < listOfUsers.length; i++) {
-                  onlineUsersMessage = onlineUsersMessage + listOfUsers[i] + " is online. \n"
+                  onlineUsersMessage = listOfUsers[i] + " is online. \n"
                   console.log("online message: " + onlineUsersMessage);
                 }
 
@@ -325,7 +325,7 @@ app.post('/checkins', function(req, res) {
                requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
 
                });
-                      
+
                     });
 
            
