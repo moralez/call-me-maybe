@@ -414,6 +414,13 @@ var params = { exclude:["explicit"]};
 requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
   console.log("ParsedBody: " + body);
 
+  //req.body.user_id
+  var messageText = body.value.joke;
+  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
+    requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+
+    });
+
 });
 
 });
