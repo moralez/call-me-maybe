@@ -239,7 +239,7 @@ app.post('/checkins', function(req, res) {
   
    // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
-   console.log("res: " + res)
+   console.log("res: " + JSON.parse(res));
   
 });
 
