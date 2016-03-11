@@ -276,11 +276,26 @@ app.post('/checkins', function(req, res) {
                         var userId = message.user;
 
                         if (checkedInUsers.indexOf(userId) == -1) {
-                           checkedInUsers.push(userId);
-                        }
+                         checkedInUsers.push(userId);
+                       }
                      }
-                  });
-               }
+
+                     var userParams = { token:ACCESS_TOKEN };
+                     requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
+                       var userName = JSON.parse(body)["user"].name;
+                       var messageText = userName + "has checked in."
+
+                       var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText};
+                       requestHelper({url:"https://slack.com/api/chat.postMessage", qs:userParams}, function(err, response, body) {
+                         console.log(userParams);
+                         console.log("check in error: " + err)
+                         console.log("check in response: " + response)
+                         console.log("check in body: " + body);
+                       });
+                     });
+
+                   });
+                }
 
                res.end("Checked in users: " + checkedInUsers.toString());
             });
