@@ -419,8 +419,10 @@ requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err
   var messageText = parsedJson.value.joke;
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
+
   var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, text: messageText, as_user: true, parse: "full" };
     requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+      console.log("Finished sending chuck joke");
       res.end()
     });
 
