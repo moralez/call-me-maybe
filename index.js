@@ -312,24 +312,26 @@ app.post('/checkins', function(req, res) {
                       console.log("Parsed Name: " + name);
 
                       listOfUsers.push(name);
-                   });
+                    });
                   };
                 }
 
                 // make online message for channel
-                var onlineUsersMessage;
+                var onlineUsersMessage = "LIst of users online: ";
                 for (var i = 0; i < listOfUsers.length; i++) {
                   onlineUsersMessage = listOfUsers[i] + " is online. \n"
+                  console.log("online message: " + onlineUsersMessage);
                 }
 
                // req.body.user_id
+               console.log("userID: " + req.body.user.id);
                var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: onlineUsersMessage, as_user: true, parse: "full" };
                requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
 
                });
 
 
-});
+             });
 }
 
 res.end();
