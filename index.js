@@ -328,7 +328,7 @@ function parseThroughListings(id, zipCode, page) {
     }
     
     messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property.\n\n"
-    messageText = messageText + "Please add the reaction :right_arrow: to go the next page of results.";
+    messageText = messageText + "Please add the reaction :arrow_right: to go the next page of results.";
     
     var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
       request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
