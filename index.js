@@ -263,14 +263,14 @@ app.post('/checkins', function(req, res) {
             console.log("The magic ID is: " + group.id);
 
             var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-            request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+            requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
                var users = JSON.parse(body)["users"];
 
                var checkedInUsers = [];
 
                for (var i = 0; i < channelsToCheck.length; i++) {
                   var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
-                  request({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
+                  requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
                      var messages = JSON.parse(body)["messages"];
                      for (var message in messages) {
                         var userId = message.user;
