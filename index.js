@@ -289,7 +289,8 @@ app.post('/checkins', function(req, res) {
                   var channelHistoryParams = { token:ACCESS_TOKEN, channel:preferredChannelId, oldest:(today8AM.getTime()/1000), latest:(today1115AM.getTime()/1000) };
                   requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
                      console.log("Body: " + body);
-                     var messages = body["messages"]
+                     var parsedBody = JSON.parse(body)
+                     var messages = parsedBody.messages
                      console.log("Messages: " + messages)
                   });
                }
