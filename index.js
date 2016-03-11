@@ -335,7 +335,7 @@ function parseThroughListings(id, zipCode, currentPage) {
          var responseBody = JSON.parse(body)
          LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
          console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
-         res.end();
+         // res.end();
       });
    });
 
@@ -353,7 +353,7 @@ console.log("ZipCode: " + zipCode);
 console.log("totalPages: " + totalPages);
 
 parseThroughListings(requestID, zipCode, currentPage)
-
+res.end();
 });
 
 function determineEmojiForOption(index) {
