@@ -413,7 +413,7 @@ app.post('/chuck', function(req, res) {
 var zipCodeObject = { exclude:[explicit]};
 requestHelper({url:"http://api.icndb.com/jokes/random", qs:zipCodeObject}, function(err, response, body) {
   var parsedBody = JSON.parse(body);
-  console.log("ParsedBody: " + parsedBody);
+  console.log("ParsedBody: " + JSON.stringify(parsedBody));
 
 });
 
