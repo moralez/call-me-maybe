@@ -301,7 +301,7 @@ app.post('/checkins', function(req, res) {
 
                 }
 
-               res.end("Checked in users: " + checkedInUsers.toString());
+               // res.end("Checked in users: " + checkedInUsers.toString());
             });
          }
       }
