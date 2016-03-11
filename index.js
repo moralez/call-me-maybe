@@ -340,11 +340,19 @@ function parseThroughListings(id, zipCode, page) {
          // res.end();
 
          var emojis = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
-         for (var index in emojis) {
-            console.log("Emoji: " + emojis[index]);
-            var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[index], channel:responseBody.channel, timestamp:responseBody.message.ts };
+         // for (var index in emojis) {
+         //    console.log("Emoji: " + emojis[index]);
+         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[index], channel:responseBody.channel, timestamp:responseBody.message.ts };
+         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
+         //       console.log("SHould have added " + emojis[index] + " reaction");
+         //    });
+         // }
+
+         for (var i = 0; i < emojis.length; i++) {
+            console.log("Emoji: " + emojis[i]);
+            var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[i], channel:responseBody.channel, timestamp:responseBody.message.ts };
             request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-               console.log("SHould have added " + emoji + " reaction");
+               console.log("SHould have added " + emojis[i] + " reaction");
             });
          }
 
