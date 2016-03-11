@@ -435,7 +435,7 @@ res.end();
 
 function addNextReaction(previousIndex, channel, timestamp) {
    console.log("Previous Index: " + previousIndex)
-   var newIndex = previousIndex++;
+   var newIndex = ++previousIndex;
    console.log("New Index: " + newIndex);
    var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[newIndex], channel:channel, timestamp:timestamp };
    requestHelper({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
