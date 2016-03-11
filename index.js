@@ -417,9 +417,9 @@ requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err
   //req.body.user_id
   var parsedJson = JSON.parse(body);
   var messageText = parsedJson.value.joke;
-  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
+  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: messageText, as_user: true, parse: "full" };
     requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-
+      res.end()
     });
 
 });
