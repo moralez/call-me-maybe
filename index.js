@@ -337,6 +337,11 @@ function parseThroughListings(id, zipCode, page) {
          LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
          console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
          // res.end();
+
+         var reactionParams = { token:BOT_ACCESS_TOKEN, name:"zero" channel:responseBody.channel, timestamp:responseBody.message.ts };
+         request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
+            console.log("SHould have added zero reaction");
+         });
       });
    });
 
