@@ -35,7 +35,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
     console.log("Before " + reply);
     BOT_ACCESS_TOKEN = reply
     if (BOT_ACCESS_TOKEN) {
-      rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'debug'});
+      rtm = new RtmClient(BOT_ACCESS_TOKEN, {logLevel: 'none'});
       rtm.start();
 
       rtm.on(RTM_EVENTS.REACTION_ADDED, function handleRtmReactionAdded(reaction) {
@@ -104,7 +104,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
                requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
                   console.log("Finished sending postMessage");
-                  // res.end();
+                  response.end();
                });
             } else if (nextPage) {
               parseThroughListings(requestID, zipCode, ++currentPage)
