@@ -284,17 +284,16 @@ app.post('/checkins', function(req, res) {
                   var messageText = ""
                    console.log("Checked in user id: " + checkedInUsers[i]);
 
-                  for(var i = 0; i < checkedInUsers.length; i++) { 
-                   var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
-                   requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
-                     var userName = JSON.parse(body)["user"].name;
-                     console.log("USERNAME: " + userName);
-                     messageText = messageText + userName + "has checked in. \n";
-                     console.log("messageText: " + messageText);
-
+                   for(var i = 0; i < checkedInUsers.length; i++) { 
+                     var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
+                     requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
+                       var userName = JSON.parse(body)["user"].name;
+                       console.log("USERNAME: " + userName);
+                       messageText = messageText + userName + "has checked in. \n";
+                       console.log("messageText: " + messageText);
+                       
+                     });
                    }
-
-                 });
 
                  }
 
