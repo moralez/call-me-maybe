@@ -339,11 +339,11 @@ function parseThroughListings(id, zipCode, page) {
          console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
          // res.end();
 
-         var reactions = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
-         for (reaction in reactions) {
-            var reactionParams = { token:BOT_ACCESS_TOKEN, name:reaction, channel:responseBody.channel, timestamp:responseBody.message.ts };
+         var emjois = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
+         for (emoji in emojis) {
+            var reactionParams = { token:BOT_ACCESS_TOKEN, name:emoji, channel:responseBody.channel, timestamp:responseBody.message.ts };
             request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-               console.log("SHould have added " + reaction + " reaction");
+               console.log("SHould have added " + emoji + " reaction");
             });
          }
       });
