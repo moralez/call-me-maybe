@@ -278,6 +278,8 @@ app.post('/checkins', function(req, res) {
                         if (checkedInUsers.indexOf(userId) == -1) {
                          checkedInUsers.push(userId);
                        }
+                     console.log("Check in users: " + checkedInUsers);
+
                      }
                    });
 
@@ -291,10 +293,9 @@ app.post('/checkins', function(req, res) {
                        console.log("USERNAME: " + userName);
                        messageText = messageText + userName + "has checked in. \n";
                        console.log("messageText: " + messageText);
-                       
+
                      });
                    }
-
                  }
 
                // res.end("Checked in users: " + checkedInUsers.toString());
