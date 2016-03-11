@@ -302,8 +302,7 @@ app.post('/checkins', function(req, res) {
                       requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
                         console.log("Response: " + JSON.stringify(response));
                         console.log("Body: " + body);
-                        var parsedResponse = JSON.parse(response);
-                        var name = parsedBody.first_name + " " + parsedBody.last_name;
+                        var name = response.first_name + " " + response.last_name;
                         console.log("Parsed Name: " + name);
                       });
                      }
