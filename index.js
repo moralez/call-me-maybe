@@ -193,8 +193,8 @@ requestHelper(options, function (error, response, body) {
          ACCESS_TOKEN = bodyJson.access_token;
          BOT_ACCESS_TOKEN = bodyJson.bot.bot_access_token;
          console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
-         client.set("ACCESS_TOKEN", ACCESS_TOKEN, redis.print);
-         client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, redis.print);
+         client.set("ACCESS_TOKEN", ACCESS_TOKEN, client.print);
+         client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, client.print);
       }
       
       console.log("Response: " + response);
