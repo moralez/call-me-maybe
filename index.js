@@ -255,6 +255,9 @@ app.post('/checkins', function(req, res) {
          console.log("Comparing " + req.body.text + " to " + group["handle"]);
 
          if (req.body.text == group.handle) {
+            var prefChannels = group.prefs.channels;
+            console.log("Preferred Channels: " + JSON.stringify(prefChannels));
+            
             var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
             requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
                var parsedBody = JSON.parse(body);
