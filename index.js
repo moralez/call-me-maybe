@@ -285,7 +285,7 @@ app.post('/checkins', function(req, res) {
                        var userName = JSON.parse(body)["user"].name;
                        var messageText = userName + "has checked in."
 
-                       var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText};
+                       var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true};
                        requestHelper({url:"https://slack.com/api/chat.postMessage", qs:userParams}, function(err, response, body) {
                          console.log(userParams);
                          console.log("check in error: " + err)
