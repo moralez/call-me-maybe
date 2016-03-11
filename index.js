@@ -292,6 +292,10 @@ app.post('/checkins', function(req, res) {
                      var parsedBody = JSON.parse(body)
                      var messages = parsedBody.messages
                      console.log("Messages: " + JSON.stringify(messages))
+                     for(var i = 0; i < messages.length; i++) {
+                      var userID = messages[i].user
+                      console.log("userIDFromMessage: " + userID);
+                     }
                   });
                }
 
