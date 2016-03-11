@@ -107,7 +107,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                   res.end();
                });
             } else if (nextPage) {
-              parseThroughListings(requestID, zipCode, currentPage++)
+              parseThroughListings(requestID, zipCode, ++currentPage)
             }
          }
       });
@@ -274,9 +274,9 @@ app.post('/checkins', function(req, res) {
    // });
 });
 
-function parseThroughListings(id, zipCode, currentPage) {
+function parseThroughListings(id, zipCode, page) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
-  var zipCodeObject = { query:zipCode, per_page: 10, page: currentPage};
+  var zipCodeObject = { query:zipCode, per_page: 10, page: page};
   var request = require('request');
    request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
 
