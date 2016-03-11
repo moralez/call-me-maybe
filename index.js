@@ -240,6 +240,15 @@ app.post('/checkins', function(req, res) {
    // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
    console.log("req: " + JSON.stringify(req.body));
+   var userGroupName = requestBody.text
+   console.log("userGroupName: " + userGroupName);
+
+    var getUsersParams = { token:BOT_ACCESS_TOKEN, channel:id, usergroup: userGroupName };
+    requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:zipCodeObject}, function(err, response, body) {
+      var usersInGroup = response.users
+      console.log("usersInGroup": usersInGroup);
+    });
+
   
 });
 
