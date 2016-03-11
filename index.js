@@ -291,7 +291,7 @@ app.post('/checkins', function(req, res) {
                      console.log("Body: " + body);
                      var parsedBody = JSON.parse(body)
                      var messages = parsedBody.messages
-                     console.log("Messages: " + messages)
+                     console.log("Messages: " + JSON.stringify(messages))
                   });
                }
 
