@@ -26,10 +26,11 @@ var LAST_SEARCH_ID = "";
 var emojis = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
 
 client.get("ACCESS_TOKEN", function(err, reply) {
-    // reply is null when the key is missing
-    console.log("Before " + reply);
-    ACCESS_TOKEN = reply;
- });
+   // reply is null when the key is missing
+   console.log("Before " + reply);
+   ACCESS_TOKEN = reply;
+});
+
 console.log("ACCESS_TOKEN Set: " + ACCESS_TOKEN);
 
 client.get("BOT_ACCESS_TOKEN", function(err, reply) {
@@ -257,13 +258,33 @@ app.post('/checkins', function(req, res) {
          if (req.body.text == group.handle) {
             var prefChannels = group.prefs.channels;
             console.log("Preferred Channels: " + JSON.stringify(prefChannels));
-            
+
             var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
             requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
                var parsedBody = JSON.parse(body);
                var usersInGroup = parsedBody.users
                console.log("body: " + JSON.stringify(parsedBody));
                console.log("usersInGroup: " + usersInGroup);
+
+
+               var today8AM = new Date();
+               today8AM.setHours(8);
+               today8AM.setMinutes(0);
+               today8AM.setMilliseconds(0);
+
+               var today1115AM = new Date();
+               // today8AM.setHours(11);
+               // today8AM.setMinutes(15);
+               // today8AM.setMilliseconds(0);
+
+               for (var i = 0; i < prefChannels.length; i++) {
+                  var preferredChannelId = prefChannels[i];
+                  //https://slack.com/api/channels.history
+                  var channelHistoryParams = { token:ACCESS_TOKEN, channel:preferredChannelId, oldest:today8AM.getTime(), latest:today1115AM.getTime() };
+                  requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
+                     console.log("Body: " + body);
+                  });
+               }
 
                res.end();
             });
