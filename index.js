@@ -15,6 +15,7 @@ var listings;
 var zipCode;
 var totalPages;
 var currentPage;
+var requestID;
 
 client.auth(rtg.auth.split(":")[1]);
 
@@ -106,7 +107,7 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                   res.end();
                });
             } else if (nextPage) {
-              parseThroughListings(zipCode, currentPage++)
+              parseThroughListings(requestID, zipCode, currentPage++)
             }
          }
       });
@@ -273,7 +274,7 @@ app.post('/checkins', function(req, res) {
    // });
 });
 
-function parseThroughListings(zipCode, currentPage) {
+function parseThroughListings(id, zipCode, currentPage) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
   var zipCodeObject = { query:zipCode, per_page: 10, page: currentPage};
   var request = require('request');
@@ -328,7 +329,7 @@ function parseThroughListings(zipCode, currentPage) {
     
     messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property";
     
-    var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true, parse: "full" };
+    var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
       request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
        console.log("Finished sending postMessage");
          var responseBody = JSON.parse(body)
@@ -346,11 +347,12 @@ app.post('/ag', function(req, res){
 zipCode = req.body.text
 totalPages = req.body.total_pages
 currentPage = 1
+requestID = req.body.user_id
 console.log("User ID: " + req.body.user_id)
 console.log("ZipCode: " + zipCode);
 console.log("totalPages: " + totalPages);
 
-parseThroughListings(zipCode, currentPage)
+parseThroughListings(requestID, zipCode, currentPage)
 
 });
 
