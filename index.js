@@ -233,80 +233,14 @@ app.get('/tokens', function(req, res) {
 
 app.post('/checkins', function(req, res) {
    // someone run /checkins
-   // this grabs the channel message was sent from
-   // gets list of users in the channel
-   // gets the recent chat history from 7 AM  to 11 AM
-   // checks for messages from those users in that time frame
-   // returns lists of who has checked in and who has not
+   // get user group from input
+   // gets list of users in the usergroup
+   //parse through perferred channel of usergroup for each user in usergroup's message
+  
    // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
-
-   var channelsToCheck = [];
-
-   var userGroupObject = { token:ACCESS_TOKEN };
-   requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-      var convertedBody = JSON.parse(body);
-
-      console.log("converted body: " + JSON.stringify(convertedBody));
-      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
-
-      var usergroups = convertedBody["usergroups"];
-      for (var i = 0; i < usergroups.length; i++) {
-         var group = usergroups[i];
-
-         console.log("Comparing " + req.body.text + " to " + group["handle"]);
-
-         if (req.body.text == group.handle) {
-
-            channelsToCheck = group.prefs.channels;
-
-            console.log("The magic ID is: " + group.id);
-
-            var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-            console.log("usergroup id: " + group.id);
-            requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
-               var users = JSON.parse(body)["users"];
-
-               var checkedInUsers = [];
-
-               for (var i = 0; i < channelsToCheck.length; i++) {
-                console.log("Channel to check:" + channelsToCheck[i]);
-                  var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
-                  requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
-                     var messages = JSON.parse(body)["messages"];
-                     console.log("Messages: " + messages);
-                     for (var message in messages) {
-
-                        var userId = message.user;
-
-                        if (checkedInUsers.indexOf(userId) == -1) {
-                         checkedInUsers.push(userId);
-                       }
-                     console.log("Check in users: " + checkedInUsers);
-
-                     }
-                   });
-
-                  var messageText = ""
-                   console.log("Checked in user id: " + checkedInUsers[i]);
-
-                   for(var i = 0; i < checkedInUsers.length; i++) { 
-                     var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
-                     requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
-                       var userName = JSON.parse(body)["user"].name;
-                       console.log("USERNAME: " + userName);
-                       messageText = messageText + userName + "has checked in. \n";
-                       console.log("messageText: " + messageText);
-
-                     });
-                   }
-                 }
-
-            });
-         }
-      }
-      res.end("Checked in users");
-   });
+   console.log("res: " + res)
+  
 });
 
 function parseThroughListings(id, zipCode, page) {
