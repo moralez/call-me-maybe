@@ -268,15 +268,10 @@ app.post('/checkins', function(req, res) {
 
 
                var today8AM = new Date();
-               console.log(today8AM)
                today8AM.setHours(13);
-               console.log(today8AM)
                today8AM.setMinutes(0);
-               console.log(today8AM)
                today8AM.setSeconds(0);
-               console.log(today8AM);
                today8AM.setMilliseconds(0);
-               console.log(today8AM);
 
                var today1115AM = new Date();
                // today8AM.setHours(11);
@@ -305,8 +300,20 @@ app.post('/checkins', function(req, res) {
                         console.log("Body.user" + JSON.stringify(body.user));
                         var name = body.user.name
                         console.log("Parsed Name: " + name);
+                        listOfUsers = listOfUsers + name
                       });
-                     }
+                    }
+
+                    var onlineUsersMessage;
+                    for (var i = 0; i < listOfUsers.length; i++) {
+                      onlineUsersMessage = listOfUsers[i] + " is online. \n"
+                    }
+
+                     // req.body.user_id
+                     var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: onlineUsersMessage, as_user: true, parse: "full" };
+                     requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+
+                     });
                   });
                }
 
