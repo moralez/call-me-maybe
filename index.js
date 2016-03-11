@@ -244,7 +244,7 @@ app.post('/checkins', function(req, res) {
    var channelsToCheck = [];
 
    var userGroupObject = { token:ACCESS_TOKEN };
-   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+   requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
       var convertedBody = JSON.parse(body);
 
       console.log("converted body: " + JSON.stringify(convertedBody));
