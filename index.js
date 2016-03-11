@@ -272,7 +272,9 @@ app.post('/checkins', function(req, res) {
                   var channelHistoryParams = { token:ACCESS_TOKEN, channel:channelsToCheck[i] };
                   requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
                      var messages = JSON.parse(body)["messages"];
+                     console.log("Messages: " + messages);
                      for (var message in messages) {
+
                         var userId = message.user;
 
                         if (checkedInUsers.indexOf(userId) == -1) {
