@@ -301,8 +301,8 @@ app.post('/checkins', function(req, res) {
                       var userInfo = { token:ACCESS_TOKEN, user:userID };
                       requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
                         console.log("Body: " + body);
-                        console.log("Body.user" + body.user);
-                        console.log("Body[body]" + body["user"])
+                        var body = JSON.parse(body.user)
+                        console.log("Body.user" + JSON.stringify(body.user));
                         var name = body.user.name
                         console.log("Parsed Name: " + name);
                       });
