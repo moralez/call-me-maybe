@@ -263,6 +263,7 @@ app.post('/checkins', function(req, res) {
             console.log("The magic ID is: " + group.id);
 
             var blah = { token:ACCESS_TOKEN, usergroup:group.id };
+            console.log("usergroup id: " + group.id);
             requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
                var users = JSON.parse(body)["users"];
 
