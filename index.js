@@ -239,7 +239,7 @@ app.post('/checkins', function(req, res) {
    // checks for messages from those users in that time frame
    // returns lists of who has checked in and who has not
    // console.log("Request Body: " + JSON.stringify(req.body));
-   var requestBody = JSON.parse(req.body);
+   var requestBody = req.body;
 
    var channelsToCheck = [];
 
