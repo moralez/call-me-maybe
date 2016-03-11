@@ -340,12 +340,20 @@ function parseThroughListings(id, zipCode, page) {
          // res.end();
 
          var emojis = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
-         for (emoji in emojis) {
+         for (var emoji in emojis) {
             var reactionParams = { token:BOT_ACCESS_TOKEN, name:emoji, channel:responseBody.channel, timestamp:responseBody.message.ts };
             request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
                console.log("SHould have added " + emoji + " reaction");
             });
          }
+
+         // emojis.forEach(function logArrayElements(element, index, array) {
+         //    console.log(element);
+         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:element, channel:responseBody.channel, timestamp:responseBody.message.ts };
+         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
+         //       console.log("SHould have added " + emoji + " reaction");
+         //    });
+         // });
       });
    });
 
