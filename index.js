@@ -348,8 +348,9 @@ totalPages = req.body.total_pages
 currentPage = 1
 console.log("User ID: " + req.body.user_id)
 console.log("ZipCode: " + zipCode);
+console.log("totalPages: " + totalPages);
 
-parseThroughListings(zipCode, 0)
+parseThroughListings(zipCode, currentPage)
 
 });
 
