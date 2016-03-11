@@ -236,13 +236,13 @@ app.post('/checkins', function(req, res) {
    // get user group from input
    // gets list of users in the usergroup
    //parse through perferred channel of usergroup for each user in usergroup's message
-   
+
    // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
    console.log("req: " + JSON.stringify(req.body));
 
    var userGroupObject = { token:ACCESS_TOKEN };
-   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+   requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
      var convertedBody = JSON.parse(body);
 
      console.log("converted body: " + JSON.stringify(convertedBody));
@@ -261,7 +261,7 @@ app.post('/checkins', function(req, res) {
         console.log("body: " + body);
         console.log("usersInGroup: " + usersInGroup);
       });
-       
+
      }
    }
  });
