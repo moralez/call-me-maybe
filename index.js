@@ -284,21 +284,14 @@ app.post('/checkins', function(req, res) {
                   var messageText = ""
                   for(var i = 0; i < checkedInUsers.length; i++) { 
                    var userParams = { token:ACCESS_TOKEN, user: checkedInUsers[i]};
-                   console.log("Checked in user id: " + checkedInUsers[i])
+                   console.log("Checked in user id: " + checkedInUsers[i]);
                    requestHelper({url:"https://slack.com/api/users.info", qs:userParams}, function(err, response, body) {
                      var userName = JSON.parse(body)["user"].name;
                      console.log("USERNAME: " + userName);
                      messageText = messageText + userName + "has checked in. \n";
-                     console.log("messageText: " + messageText);
                    }
+                  console.log("messageText: " + messageText);
 
-                   var messageParams = { token:ACCESS_TOKEN, channel:req.body.user_id, text: messageText, as_user: true};
-                   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:userParams}, function(err, response, body) {
-                     console.log(userParams);
-                     console.log("check in error: " + err)
-                     console.log("check in response: " + response)
-                     console.log("check in body: " + body);
-                   });
                  });
 
                  }
@@ -313,8 +306,7 @@ app.post('/checkins', function(req, res) {
 function parseThroughListings(id, zipCode, page) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
   var zipCodeObject = { query:zipCode, per_page: 10, page: page};
-  var request = require('request');
-   request({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
+   requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject}, function(err, response, body) {
 
       var responseBody = JSON.parse(body)
       
@@ -367,7 +359,7 @@ function parseThroughListings(id, zipCode, page) {
     messageText = messageText + "Please add the reaction :arrow_right: to go the next page of results.";
     
     var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
-      request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+      requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
        console.log("Finished sending postMessage");
          var responseBody = JSON.parse(body)
          LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
@@ -434,11 +426,9 @@ app.post('/roulette',function(req,res){
    var request=JSON.stringify(req.body);
    console.log("request = "+request);
 
-   var request = require('request');
-
    console.log("roulette - ACCESS_TOKEN: " + ACCESS_TOKEN);
    var userGroupObject = { token:ACCESS_TOKEN };
-   request({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+   requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
    var convertedBody = JSON.parse(body);
 
    console.log("converted body: " + JSON.stringify(convertedBody));
@@ -454,21 +444,21 @@ app.post('/roulette',function(req,res){
          console.log("The magic ID is: " + group.id);
 
          var blah = { token:ACCESS_TOKEN, usergroup:group.id };
-         request({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
+         requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:blah}, function(err, response, body) {
             var users = JSON.parse(body)["users"];
             var rand = users[Math.floor(Math.random() * users.length)];
 
             console.log("random Member id: ", rand);
 
             var userInfo = { token:ACCESS_TOKEN, user:rand };
-            request({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+            requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
                var user = JSON.parse(body)["user"];
                var userName = user["name"];
 
                console.log("User Name: ", userName);
 
                var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.channel_id, text: "Bang! " + userName + " has been chosen", as_user: true };
-               request({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+               requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
                   console.log("Finished sending postMessage");
                   res.end();
                });
