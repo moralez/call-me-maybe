@@ -345,74 +345,8 @@ function parseThroughListings(id, zipCode, page) {
          var responseBody = JSON.parse(body)
          LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
          console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
-         // res.end();
-
          
-         // for (var index in emojis) {
-         //    console.log("Emoji: " + emojis[index]);
-         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[index], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //       console.log("SHould have added " + emojis[index] + " reaction");
-         //    });
-         // }
-
-         // for (var i = 0; i < emojis.length; i++) {
-         //    console.log("Emoji: " + emojis[i]);
-         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[i], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //       console.log("SHould have added " + emojis[i] + " reaction");
-         //    });
-         // }
-
-         // var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[0], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //       var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[1], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //       request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //          var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[2], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //          request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //             var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[3], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //             request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[4], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                   var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[5], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                   request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                      var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[6], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                      request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                         var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[7], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                         request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                            var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[8], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                            request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                               var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[9], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                               request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                                  var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[10], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                                  request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                                     var reactionParams = { token:BOT_ACCESS_TOKEN, name:emojis[11], channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //                                     request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //                                        console.log("SHould have added " + emojis[i] + " reaction");
-         //                                     });
-         //                                  });
-         //                               });
-         //                            });
-         //                         });
-         //                      });
-         //                   });
-         //                });
-         //             });
-         //          });
-         //       });
-         //    });
-
          addNextReaction(-1, responseBody.channel, responseBody.message.ts);
-
-         // emojis.forEach(function logArrayElements(element, index, array) {
-         //    console.log(element);
-         //    var reactionParams = { token:BOT_ACCESS_TOKEN, name:element, channel:responseBody.channel, timestamp:responseBody.message.ts };
-         //    request({url:"https://slack.com/api/reactions.add", qs:reactionParams}, function(err, response, body) {
-         //       console.log("SHould have added " + emoji + " reaction");
-         //    });
-         // });
-
-
       });
    });
 
