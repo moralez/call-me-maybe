@@ -432,13 +432,13 @@ requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err
 
 app.post('/blamejmo', function(req, res) {
 
-  var blameJmoArray = ["Dang it, Jmo!, Why, Jmo, *why* did you do it?, Jmo. :facepalm:"]
+  var blameJmoArray = ["Dang it, Jmo!", "Why, Jmo, *WHY* did you do it?", "Jmo. :facepalm:", "Look out! Jmo's at it again!", "Jmo, stahp already."]
   var randomValue = blameJmoArray[Math.floor(Math.random() * blameJmoArray.length)]
   var messageText =  ":thumbsup::skin-tone-2: " + randomValue;
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
 
-  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, text: messageText, as_user: true, parse: "full" };
+  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, text: messageText, as_user: false, parse: "full", username: "Blame JMO" };
     requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
       console.log("Finished sending blame jmo");
       res.end()
