@@ -22,6 +22,7 @@ client.auth(rtg.auth.split(":")[1]);
 var ACCESS_TOKEN = "";
 var BOT_ACCESS_TOKEN = "";
 var LAST_SEARCH_ID = "";
+var numberOfTimesToBlameJmo = 0
 
 var emojis = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "arrow_right"];
 
@@ -434,7 +435,7 @@ app.post('/blamejmo', function(req, res) {
 
   var blameJmoArray = ["Dang it, Jmo!", "Why, Jmo, *WHY* did you do it?", "Jmo. :facepalm:", "Look out! Jmo's at it again!", "Jmo, stahp already."]
   var randomValue = blameJmoArray[Math.floor(Math.random() * blameJmoArray.length)]
-  var messageText =  ":thumbsup::skin-tone-2: " + randomValue;
+  var messageText =  ":thumbsup::skin-tone-2: " + randomValue + "\n Number of Jmo infractions to date: " + (numberOfTimesToBlameJmo + 1);
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
 
