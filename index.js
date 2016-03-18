@@ -273,10 +273,10 @@ app.post('/checkins', function(req, res) {
                today8AM.setSeconds(0);
                today8AM.setMilliseconds(0);
 
-               var today1115AM = new Date();
-               today1115AM.setHours(11);
-               today1115AM.setMinutes(15);
-               today1115AM.setMilliseconds(0);
+        var today1115AM = new Date();
+        today1115AM.setHours(16);
+        today1115AM.setMinutes(15);
+        today1115AM.setMilliseconds(0);
 
                // for each of the preferred channels
                for (var i = 0; i < prefChannels.length; i++) {
