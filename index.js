@@ -105,23 +105,23 @@ client.get("BOT_ACCESS_TOKEN", function(err, reply) {
                console.log("Not from bot");
                if (option != -1 && nextPage == false) {
                   if(listings[option].mgtconame) {
-                   contactInformationText = "Property Management: " + listings[option].mgtconame;
-                }
-                if(listings[option].formatted_mdot_phn) {
+                    contactInformationText = "Property Management: " + listings[option].mgtconame;
+                 }
+                 if(listings[option].formatted_mdot_phn) {
                   contactInformationText = contactInformationText + "\nPhone Number: " + listings[option].formatted_mdot_phn;
                }
                if(listings[option].seo_path) {
-                contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
-             }
+                 contactInformationText = contactInformationText + "\nWeb Page: " + "http://www.qa.apartmentguide.com" + listings[option].seo_path;
+              }
 
-             var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
-             requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+              var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:reaction.user, text: contactInformationText, as_user: true, parse: "full" };
+              requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
                console.log("Finished sending postMessage");
             });
-          } else if (nextPage) {
-             parseThroughListings(requestID, zipCode, ++currentPage)
-          }
-       } else {
+           } else if (nextPage) {
+              parseThroughListings(requestID, zipCode, ++currentPage)
+           }
+        } else {
          console.log("Reaction from bot!");
          addNextReaction(option, reaction.item.channel, reaction.item.ts);
       }
@@ -144,7 +144,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
-  response.render('pages/index');
+ response.render('pages/index');
 });
 
 app.get('/auth', function(request, response) {
@@ -156,29 +156,29 @@ app.get('/auth', function(request, response) {
 });
 
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+ console.log('Node app is running on port', app.get('port'));
 });
 
 function getKey(code) {
-  var headers = {
-    'User-Agent':       'Super Agent/0.0.1',
-    'Content-Type':     'application/x-www-form-urlencoded'
- }
+ var headers = {
+  'User-Agent':       'Super Agent/0.0.1',
+  'Content-Type':     'application/x-www-form-urlencoded'
+}
 
- var options = {
-    method: 'GET',
-    url: 'https://slack.com/api/oauth.access',
-    headers: headers,
-    qs: {
-      'client_id': '24999931810.25003305249',
-      'client_secret': '2ef373aad7fac39fdb54aceeae307039',
-      'code': code,
-      'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
-   }
+var options = {
+  method: 'GET',
+  url: 'https://slack.com/api/oauth.access',
+  headers: headers,
+  qs: {
+   'client_id': '24999931810.25003305249',
+   'client_secret': '2ef373aad7fac39fdb54aceeae307039',
+   'code': code,
+   'redirect_uri': 'https://call-me-maybe-rp.herokuapp.com/auth'
+}
 }
 
 requestHelper(options, function (error, response, body) {
- if (!error && response.statusCode == 200) {
+  if (!error && response.statusCode == 200) {
       // Print out the response body
       console.log("Body: " + body);
       var bodyJson = JSON.parse(body)
@@ -220,9 +220,9 @@ requestHelper(options, function (error, response, body) {
 // });
 
 app.get('/tokens', function(req, res) {
- var tokenString = "";
- client.get("ACCESS_TOKEN", function(err, reply) {
-  tokenString += reply.toString();
+  var tokenString = "";
+  client.get("ACCESS_TOKEN", function(err, reply) {
+    tokenString += reply.toString();
         console.log(res.toString()); // => should be crazy token
         client.get("BOT_ACCESS_TOKEN", function(err, reply) {
          tokenString += " " + reply.toString();
@@ -233,112 +233,113 @@ app.get('/tokens', function(req, res) {
 })
 
 app.post('/checkins', function(req, res) {
-// someone run /checkins
-// get user group from input
-// gets list of users in the usergroup
-//parse through perferred channel of usergroup for each user in usergroup's message
+   // someone run /checkins
+   // get user group from input
+   // gets list of users in the usergroup
+   //parse through perferred channel of usergroup for each user in usergroup's message
 
-// console.log("Request Body: " + JSON.stringify(req.body));
-var requestBody = req.body;
-console.log("req: " + JSON.stringify(req.body));
+   // console.log("Request Body: " + JSON.stringify(req.body));
+   var requestBody = req.body;
+   console.log("req: " + JSON.stringify(req.body));
 
-var userGroupObject = { token:ACCESS_TOKEN };
-requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
-  var convertedBody = JSON.parse(body);
+   var userGroupObject = { token:ACCESS_TOKEN };
+   requestHelper({url:"https://slack.com/api/usergroups.list", qs:userGroupObject}, function(err, response, body) {
+      var convertedBody = JSON.parse(body);
 
-  console.log("converted body: " + JSON.stringify(convertedBody));
-  console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
+      console.log("converted body: " + JSON.stringify(convertedBody));
+      console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
 
-  var usergroups = convertedBody["usergroups"];
-  for (var i = 0; i < usergroups.length; i++) {
-    var group = usergroups[i];
+      var usergroups = convertedBody["usergroups"];
+      for (var i = 0; i < usergroups.length; i++) {
+         var group = usergroups[i];
 
-    console.log("Comparing " + req.body.text + " to " + group["handle"]);
+         console.log("Comparing " + req.body.text + " to " + group["handle"]);
 
-    if (req.body.text == group.handle) {
-      var prefChannels = group.prefs.channels;
-      console.log("Preferred Channels: " + JSON.stringify(prefChannels));
+         if (req.body.text == group.handle) {
+            var prefChannels = group.prefs.channels;
+            console.log("Preferred Channels: " + JSON.stringify(prefChannels));
 
-      var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
-      requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
-        var parsedBody = JSON.parse(body);
-        var usersInGroup = parsedBody.users
-        console.log("body: " + JSON.stringify(parsedBody));
-        console.log("usersInGroup: " + usersInGroup);
+            var getUsersParams = { token:ACCESS_TOKEN, usergroup: group.id };
+            requestHelper({url:"https://slack.com/api/usergroups.users.list", qs:getUsersParams}, function(err, response, body) {
+               var parsedBody = JSON.parse(body);
+               var usersInGroup = parsedBody.users
 
+               console.log("body: " + JSON.stringify(parsedBody));
+               console.log("usersInGroup: " + usersInGroup);
 
-        var today8AM = new Date();
-        today8AM.setHours(13);
-        today8AM.setMinutes(0);
-        today8AM.setSeconds(0);
-        today8AM.setMilliseconds(0);
+               var today8AM = new Date();
+               today8AM.setHours(13);
+               today8AM.setMinutes(0);
+               today8AM.setSeconds(0);
+               today8AM.setMilliseconds(0);
 
-        var today1115AM = new Date();
-        today1115AM.setHours(11);
-        today1115AM.setMinutes(15);
-        today1115AM.setMilliseconds(0);
+               var today1115AM = new Date();
+               today1115AM.setHours(11);
+               today1115AM.setMinutes(15);
+               today1115AM.setMilliseconds(0);
 
-// for each of the preferred channels
-for (var i = 0; i < prefChannels.length; i++) {
-// go through each and get their messages
-var preferredChannelId = prefChannels[i];
-console.log("Preferred Channel Id: " + preferredChannelId);
-var channelHistoryParams = { token:ACCESS_TOKEN, channel:preferredChannelId, oldest:(today8AM.getTime()/1000), latest:(today1115AM.getTime()/1000) };
-requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
-  console.log("Body: " + body);
-  var parsedBody = JSON.parse(body)
-  var messages = parsedBody.messages
-  console.log("Messages: " + JSON.stringify(messages));
+               // for each of the preferred channels
+               for (var i = 0; i < prefChannels.length; i++) {
+                  // go through each and get their messages
+                  var preferredChannelId = prefChannels[i];
+                  console.log("Preferred Channel Id: " + preferredChannelId);
 
-  var listOfUsers = [];
-  var checkedInUserIds = [];
+                  var channelHistoryParams = { token:ACCESS_TOKEN, channel:preferredChannelId, oldest:(today8AM.getTime()/1000), latest:(today1115AM.getTime()/1000) };
+                  requestHelper({url:"https://slack.com/api/channels.history", qs:channelHistoryParams}, function(err, response, body) {
+                     console.log("Body: " + body);
+                     var parsedBody = JSON.parse(body)
+                     var messages = parsedBody.messages
+                     console.log("Messages: " + JSON.stringify(messages));
 
-// for each of the messages, check what user said them
-// if they haven't been added to checked in users, 
-// get user info, then add them
-for(var i = 0; i < messages.length; i++) {
-  var userID = messages[i].user
-  console.log("userIDFromMessage: " + userID);
+                     var listOfUsers = [];
+                     var checkedInUserIds = [];
 
-  if (checkedInUserIds.indexOf(userID) == -1) {
-    checkedInUserIds.push(userID);
-    var userInfo = { token:ACCESS_TOKEN, user:userID };
-    requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
-      console.log("Body: " + body);
-      var body = JSON.parse(body);
-      console.log("Body.user" + JSON.stringify(body.user));
-      var name = body.user.name;
+                     // for each of the messages, check what user said them
+                     // if they haven't been added to checked in users, 
+                     // get user info, then add them
+                     for(var i = 0; i < messages.length; i++) {
+                        var userID = messages[i].user
+                        console.log("userIDFromMessage: " + userID);
 
-      console.log("Parsed Name: " + name);
+                        if (checkedInUserIds.indexOf(userID) == -1) {
+                           checkedInUserIds.push(userID);
+                           var userInfo = { token:ACCESS_TOKEN, user:userID };
+                           requestHelper({url:"https://slack.com/api/users.info", qs:userInfo}, function(err, response, body) {
+                              console.log("Body: " + body);
+                              
+                              var body = JSON.parse(body);
+                              console.log("Body.user" + JSON.stringify(body.user));
 
-      listOfUsers.push(name);
-// make online message for channel
-var onlineUsersMessage = "List of Users Online: \n";
-for (var i = 0; i < listOfUsers.length; i++) {
-  onlineUsersMessage = listOfUsers[i] + " is online. \n"
-  console.log("online message: " + onlineUsersMessage);
+                              var name = body.user.name;
+                              console.log("Parsed Name: " + name);
+
+                              listOfUsers.push(name);
+
+                              // make online message for channel
+                              var onlineUsersMessage = "List of Users Online: \n";
+                              for (var i = 0; i < listOfUsers.length; i++) {
+                                 onlineUsersMessage = listOfUsers[i] + " is online. \n"
+                                 console.log("online message: " + onlineUsersMessage);
+                              }
+
+                              // req.body.user_id
+                              console.log("userID: " + req.body.user_id);
+                              var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: onlineUsersMessage, as_user: true, parse: "full" };
+                              requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                                 res.end();
+                              });
+                           });
+                        }
+                     }
+                  });
+               }
+
+               // res.end();
+            });
+         }
+      }
+   });
 }
-
-// req.body.user_id
-console.log("userID: " + req.body.user_id);
-var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:req.body.user_id, text: onlineUsersMessage, as_user: true, parse: "full" };
-requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-
-});
-
-});
-
-
-  };
-}
-});
-}
-res.end();
-});
-}
-}
-});  
-});
 
 function parseThroughListings(id, zipCode, page) {
 //send zip code to http://m.api.qa.apartmentguide.com/search?query=30092
@@ -359,60 +360,60 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
          var index = listings[i]
          var individualListing = determineEmojiForOption(i) + ": " 
          if(index.name) {
-          individualListing = individualListing + index.name
-       } else {
-          individualListing = "This apartment "
-       }
+           individualListing = individualListing + index.name
+        } else {
+           individualListing = "This apartment "
+        }
 
-       individualListing = individualListing + " can be found " 
-       if(index.adr) {
-          individualListing = individualListing + " at " +  index.adr
-       }
+        individualListing = individualListing + " can be found " 
+        if(index.adr) {
+           individualListing = individualListing + " at " +  index.adr
+        }
 
-       if (index.cty || index.st) {
-          individualListing = individualListing + " in " + index.cty + ", " + index.st
-       }
+        if (index.cty || index.st) {
+           individualListing = individualListing + " in " + index.cty + ", " + index.st
+        }
 
-       individualListing = individualListing + "."
+        individualListing = individualListing + "."
 
-       if(index.beds) {
-          individualListing = individualListing + " " + index.beds + " beds" 
-       } 
+        if(index.beds) {
+           individualListing = individualListing + " " + index.beds + " beds" 
+        } 
 
 
-       if(index.bhs) {
-          individualListing = individualListing + " " + index.baths + " baths" 
-       }
+        if(index.bhs) {
+           individualListing = individualListing + " " + index.baths + " baths" 
+        }
 
-       if(index.prices) {
-          individualListing = individualListing + " available with prices starting at " + index.prices + "."
-       }
+        if(index.prices) {
+           individualListing = individualListing + " available with prices starting at " + index.prices + "."
+        }
 
-       messageText = messageText + individualListing + "\n";
-       console.log("Message Text: " + messageText);
-    }
-    
-    messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property.\n\n"
-    messageText = messageText + "Please add the reaction :arrow_right: to go the next page of results.";
-    
-    var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
-    requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-     console.log("Finished sending postMessage");
-     var responseBody = JSON.parse(body)
-     LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
-     console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
+        messageText = messageText + individualListing + "\n";
+        console.log("Message Text: " + messageText);
+     }
 
-     addNextReaction(-1, responseBody.channel, responseBody.message.ts);
+     messageText = messageText + "\n\n Please select from options 0 - " + (listings.length - 1) + " for Contact Information on that property.\n\n"
+     messageText = messageText + "Please add the reaction :arrow_right: to go the next page of results.";
+
+     var postMessageParams = { token:BOT_ACCESS_TOKEN, channel:id, text: messageText, as_user: true, parse: "full" };
+     requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+       console.log("Finished sending postMessage");
+       var responseBody = JSON.parse(body)
+       LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
+       console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
+
+       addNextReaction(-1, responseBody.channel, responseBody.message.ts);
+    });
   });
- });
 
 
 }
 
 app.post('/chuck', function(req, res) {
-var params = { exclude:"explicit"};
-requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
-  console.log("ParsedBody: " + body);
+   var params = { exclude:"explicit"};
+   requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
+    console.log("ParsedBody: " + body);
 
   //req.body.user_id
   var parsedJson = JSON.parse(body);
@@ -421,10 +422,10 @@ requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err
   console.log("ChannelID: " + channelID);
 
   var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, text: messageText, as_user: true, parse: "full" };
-    requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-      console.log("Finished sending chuck joke");
-      res.end()
-    });
+  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+   console.log("Finished sending chuck joke");
+   res.end()
+});
 
 });
 
@@ -456,27 +457,27 @@ function addNextReaction(previousIndex, channel, timestamp) {
 
 function determineEmojiForOption(index) {
 	switch(index) {
-     case 0:
-     return ":zero:"
-     case 1:
-     return ":one:"
-     case 2:
-     return ":two:"
-     case 3:
-     return ":three:"
-     case 4:
-     return ":four:"
-     case 5: 
-     return ":five:"
-     case 6:
-     return ":six:"
-     case 7:
-     return ":seven:"
-     case 8:
-     return ":eight:"
-     default:
-     return ":nine:"
-  }
+    case 0:
+    return ":zero:"
+    case 1:
+    return ":one:"
+    case 2:
+    return ":two:"
+    case 3:
+    return ":three:"
+    case 4:
+    return ":four:"
+    case 5: 
+    return ":five:"
+    case 6:
+    return ":six:"
+    case 7:
+    return ":seven:"
+    case 8:
+    return ":eight:"
+    default:
+    return ":nine:"
+ }
 }
 
 
