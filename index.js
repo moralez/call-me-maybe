@@ -400,6 +400,7 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
      requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
        console.log("Finished sending postMessage");
        var responseBody = JSON.parse(body)
+       console.log("responseBody.message: " + responseBody.message);
        LAST_SEARCH_ID = responseBody.channel + ":" + responseBody.message.ts;
        console.log("LAST_SEARCH_ID: " + LAST_SEARCH_ID);
 
