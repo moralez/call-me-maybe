@@ -195,6 +195,7 @@ requestHelper(options, function (error, response, body) {
          console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
          client.set("ACCESS_TOKEN", ACCESS_TOKEN, client.print);
          client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, client.print);
+         client.set(bodyJson.team_id, {"ACCESS_TOKEN": ACCESS_TOKEN, "BOT_ACCESS_TOKEN": BOT_ACCESS_TOKEN}, client.print);
       }
       
       console.log("Response: " + response);
