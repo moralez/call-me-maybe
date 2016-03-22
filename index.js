@@ -451,17 +451,12 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 function getBotAccessToken(teamID) {
    client.get(teamID, function(err, reply) {
     console.log("Error: " + err);
-    console.log("reply: " + reply);
-    console.log("reply body: " + reply.body);
-   
+    console.log("reply: " + reply);   
 
     var parsedJson = JSON.parse(reply)
     var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"])
     console.log("token object: " + json);
-
-
-    // return json.BOT_ACCESS_TOKEN.toString();
-      //console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
+    return json
    });
 }
 
@@ -470,7 +465,7 @@ app.post('/chuck', function(req, res) {
   var requestBody = req.body;
   console.log("req: " + JSON.stringify(req.body));
   console.log("req:: " + JSON.stringify(req.body.team_id));
-  getBotAccessToken(req.body.team_id)
+  var botAccessToken = getBotAccessToken(req.body.team_id)
   //ask redis for tokens associated with team id (new function, takes team id)
   //parse through for both access tokens
   //pass team id to following post message
@@ -484,7 +479,7 @@ app.post('/chuck', function(req, res) {
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
 
-  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, text: messageText, as_user: true, parse: "full" };
+  var postMessageParams = { token:botAccessToken, channel: channelID, text: messageText, as_user: true, parse: "full" };
   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
    console.log("Finished sending chuck joke");
    res.end()
