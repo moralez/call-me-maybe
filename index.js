@@ -448,29 +448,29 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 }
 
-function getBotAccessToken(teamID) {
-   client.get(teamID, function(err, reply) {
-    console.log("Error: " + err);
-    console.log("reply: " + reply);   
+function getBotAccessToken(teamID, callback) {
+ client.get(teamID, function(err, reply) {
+  console.log("Error: " + err);
+  console.log("reply: " + reply);   
 
-    var parsedJson = JSON.parse(reply)
-    var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"])
-    console.log("token object: " + json);
-    return json
-   });
+  var parsedJson = JSON.parse(reply)
+  var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"])
+  console.log("token object: " + json);
+  callback(json)
+});
 }
 
 app.post('/chuck', function(req, res) {
-   var params = { exclude:"explicit"};
-  var requestBody = req.body;
-  console.log("req: " + JSON.stringify(req.body));
-  console.log("req:: " + JSON.stringify(req.body.team_id));
-  var botAccessToken = getBotAccessToken(req.body.team_id)
-  //ask redis for tokens associated with team id (new function, takes team id)
+ var params = { exclude:"explicit"};
+ var requestBody = req.body;
+ console.log("req: " + JSON.stringify(req.body));
+ console.log("req:: " + JSON.stringify(req.body.team_id));
+ getBotAccessToken(req.body.team_id, function(botAccessToken) {
+    //ask redis for tokens associated with team id (new function, takes team id)
   //parse through for both access tokens
   //pass team id to following post message
 
-   requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
+  requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
     console.log("ParsedBody: " + body);
 
   //req.body.user_id
@@ -483,9 +483,11 @@ app.post('/chuck', function(req, res) {
   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
    console.log("Finished sending chuck joke");
    res.end()
-});
+ });
 
 });
+})
+ 
 
 });
 
