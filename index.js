@@ -453,6 +453,7 @@ function getBotAccessToken(teamID) {
     console.log("Error: " + err);
     console.log("reply: " + reply);
     var json = JSON.parse(reply);
+    console.log("token object: " + json.BOT_ACCESS_TOKEN);
     return json.BOT_ACCESS_TOKEN;
       //console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
    });
