@@ -224,8 +224,8 @@ app.get('/tokens', function(req, res) {
   var tokenString = "";
   var requestBody = req.body;
   console.log("req: " + JSON.stringify(req.body));
+  console.log("req:: " + req);
 
-  
   client.get("ACCESS_TOKEN", function(err, reply) {
     tokenString += reply.toString();
         console.log(res.toString()); // => should be crazy token
