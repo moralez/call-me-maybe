@@ -450,7 +450,9 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 function getBotAccessToken(teamID) {
    client.get(teamID, function(err, reply) {
-      console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
+    console.log("Error: " + err);
+    console.log("reply: " + reply);
+      //console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
    });
 }
 
