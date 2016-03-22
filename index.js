@@ -461,7 +461,7 @@ app.post('/chuck', function(req, res) {
   var requestBody = req.body;
   console.log("req: " + JSON.stringify(req.body));
   console.log("req:: " + JSON.stringify(req.body.team_id));
-  getBotAccessToken(JSON.stringify(req.body.team_id))
+  getBotAccessToken(req.body.team_id)
   //ask redis for tokens associated with team id (new function, takes team id)
   //parse through for both access tokens
   //pass team id to following post message
