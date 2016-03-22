@@ -193,8 +193,8 @@ requestHelper(options, function (error, response, body) {
          ACCESS_TOKEN = bodyJson.access_token;
          BOT_ACCESS_TOKEN = bodyJson.bot.bot_access_token;
          console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
-         client.set("ACCESS_TOKEN", String(ACCESS_TOKEN), client.print);
-         client.set("BOT_ACCESS_TOKEN", String(BOT_ACCESS_TOKEN), client.print);
+         client.set("ACCESS_TOKEN", ACCESS_TOKEN, client.print);
+         client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, client.print);
          client.set(bodyJson.team_id, "{\"ACCESS_TOKEN\": " + ACCESS_TOKEN + ", \"BOT_ACCESS_TOKEN\": " + BOT_ACCESS_TOKEN + "}", client.print);
       }
       
@@ -454,7 +454,7 @@ function getBotAccessToken(teamID) {
     console.log("reply: " + reply);
     var json = JSON.parse(reply);
     console.log("token object: " + json.BOT_ACCESS_TOKEN);
-    return json.BOT_ACCESS_TOKEN;
+    return json.BOT_ACCESS_TOKEN.toString();
       //console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
    });
 }
