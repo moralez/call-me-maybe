@@ -448,7 +448,7 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 }
 
-func returnBotAccessToken(teamID) {
+function getBotAccessToken(teamID) {
    client.get(teamID, function(err, reply) {
       console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
    });
@@ -459,7 +459,7 @@ app.post('/chuck', function(req, res) {
   var requestBody = req.body;
   console.log("req: " + JSON.stringify(req.body));
   console.log("req:: " + JSON.stringify(req.body.team_id));
-  returnBotAccessToken(JSON.stringify(req.body.team_id))
+  getBotAccessToken(JSON.stringify(req.body.team_id))
   //ask redis for tokens associated with team id (new function, takes team id)
   //parse through for both access tokens
   //pass team id to following post message
