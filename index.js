@@ -452,7 +452,8 @@ function getBotAccessToken(teamID) {
    client.get(teamID, function(err, reply) {
     console.log("Error: " + err);
     console.log("reply: " + reply);
-    var json = JSON.stringify(reply["BOT_ACCESS_TOKEN"])
+    var parsedJson = JSON.parse(reply)
+    var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"])
     console.log("token object: " + json);
 
 
