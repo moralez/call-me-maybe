@@ -454,7 +454,7 @@ function getBotAccessToken(teamID, callback) {
   console.log("reply: " + reply);   
 
   var parsedJson = JSON.parse(reply)
-  var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"])
+  var json = JSON.stringify(parsedJson["BOT_ACCESS_TOKEN"]).replace('"', '')
   console.log("token object: " + json);
   callback(json)
 });
@@ -479,7 +479,7 @@ app.post('/chuck', function(req, res) {
   var channelID = req.body.channel_id
   console.log("ChannelID: " + channelID);
 
-  var postMessageParams = { token:botAccessToken.replace('"', ''), channel: channelID, text: messageText, as_user: true, parse: "full" };
+  var postMessageParams = { token:botAccessToken, channel: channelID, text: messageText, as_user: true, parse: "full" };
   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
    console.log("Finished sending chuck joke");
    res.end()
