@@ -195,7 +195,7 @@ requestHelper(options, function (error, response, body) {
          console.log("AFTER - ACCESS_TOKEN: " + ACCESS_TOKEN + " " + "\nBOT_ACCESS_TOKEN: " + BOT_ACCESS_TOKEN)
          client.set("ACCESS_TOKEN", ACCESS_TOKEN, client.print);
          client.set("BOT_ACCESS_TOKEN", BOT_ACCESS_TOKEN, client.print);
-         client.set(bodyJson.team_id, "{\"ACCESS_TOKEN\": \"" + ACCESS_TOKEN + "\", \"BOT_ACCESS_TOKEN\": \"" + BOT_ACCESS_TOKEN.toString() + "\"}", client.print);
+         client.set(bodyJson.team_id, "{\"ACCESS_TOKEN\": \"" + ACCESS_TOKEN + "\", \"BOT_ACCESS_TOKEN\": \"" + BOT_ACCESS_TOKEN + "\"}", client.print);
       }
       
       console.log("Response: " + response);
@@ -466,9 +466,6 @@ app.post('/chuck', function(req, res) {
  console.log("req: " + JSON.stringify(req.body));
  console.log("req:: " + JSON.stringify(req.body.team_id));
  getBotAccessToken(req.body.team_id, function(botAccessToken) {
-    //ask redis for tokens associated with team id (new function, takes team id)
-  //parse through for both access tokens
-  //pass team id to following post message
 
   requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
     console.log("ParsedBody: " + body);
