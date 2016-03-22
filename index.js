@@ -448,11 +448,21 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 }
 
+func returnBotAccessToken(teamID) {
+   client.get(teamID, function(err, reply) {
+      console.log("BOT_ACCESS_TOKEN per team: " + JSON.stringify(reply.body.BOT_ACCESS_TOKEN));
+   });
+}
+
 app.post('/chuck', function(req, res) {
    var params = { exclude:"explicit"};
   var requestBody = req.body;
   console.log("req: " + JSON.stringify(req.body));
   console.log("req:: " + JSON.stringify(req.body.team_id));
+  returnBotAccessToken(JSON.stringify(req.body.team_id))
+  //ask redis for tokens associated with team id (new function, takes team id)
+  //parse through for both access tokens
+  //pass team id to following post message
 
    requestHelper({url:"http://api.icndb.com/jokes/random", qs:params}, function(err, response, body) {
     console.log("ParsedBody: " + body);
