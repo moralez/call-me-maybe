@@ -248,17 +248,11 @@ function findUserGroupWithName(groupName, callback) {
       }
 
       var convertedBody = JSON.parse(body);
-      console.log("findUserGroupWithName() - converted body: " + JSON.stringify(convertedBody));
-      console.log("findUserGroupWithName() - usergroups: " + JSON.stringify(convertedBody["usergroups"]));
-
       var usergroups = convertedBody["usergroups"];
+
       for (var i = 0; i < usergroups.length; i++) {
          var group = usergroups[i];
-
-         console.log("findUserGroupWithName() - Comparing " + groupName + " to " + group["handle"]);
-
          if (groupName == group.handle) {
-            // Found a match
             callback(null, group);
             success = true;
             return;
@@ -272,8 +266,6 @@ function findUserGroupWithName(groupName, callback) {
 }
 
 function getUsersInGroup(userGroup, callback) {
-   console.log("User Group: " + JSON.stringify(userGroup));
-
    var getUsersParams = {
       token: ACCESS_TOKEN,
       usergroup: userGroup.id
@@ -282,13 +274,7 @@ function getUsersInGroup(userGroup, callback) {
       url: "https://slack.com/api/usergroups.users.list",
       qs: getUsersParams
    }, function(err, response, body) {
-      var parsedBody = JSON.parse(body);
-      var usersInGroup = parsedBody.users
-
-      console.log("getUsersInGroup() - body: " + JSON.stringify(parsedBody));
-      console.log("getUsersInGroup() - usersInGroup: " + usersInGroup);
-
-      callback(null, userGroup, usersInGroup);
+      callback(null, userGroup, JSON.parse(body).users);
    });
 }
 
@@ -305,13 +291,10 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
    today1115AM.setMilliseconds(0);
 
    var prefChannels = userGroup.prefs.channels;
-   console.log("Preferred Channels: " + JSON.stringify(prefChannels));
 
    var checkedInUserIds = [];
 
    async.map(prefChannels, function(preferredChannelId, callback) {
-      console.log("Preferred Channel Id: " + preferredChannelId);
-
       var channelHistoryParams = {
          token: ACCESS_TOKEN,
          channel: preferredChannelId,
@@ -325,8 +308,7 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
          var messages = JSON.parse(body).messages;
 
          for (var i = 0; i < messages.length; i++) {
-            var userID = messages[i].user
-            console.log("userIDFromMessage: " + userID);
+            var userID = messages[i].user;
             if (typeof userID == 'undefined') {
                console.log("Undefined username!!!\n" + JSON.stringify(messages[i]));
             } else if (checkedInUserIds.indexOf(userID) == -1 && userID != "USLACKBOT") {
@@ -336,12 +318,9 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
          callback(null, checkedInUserIds);
       });
    }, function(err, results) {
-      if( err ) {
-         console.log('A file failed to process');
+      if (err) {
+         console.log('A preferred channel failed to process');
       } else {
-         console.log('All messages have been processed successfully');
-         console.log("Results: " + results);
-         console.log("Checked In Users: " + checkedInUserIds);
          callback(null, checkedInUserIds);
       }
    });
@@ -352,11 +331,9 @@ function getInfoForUsers(userIds, callback) {
    var userNames = [];
 
    async.each(userIds, function(userId, callback) {
-      // Perform operation on file here.
-      console.log('Processing User ID: ' + userId);
 
       if (userId == "USLACKBOT") {
-         console.log("Skippin slackbot");
+         // Skip slackbot
          callback();
       } else {
          var userInfo = {
@@ -369,9 +346,6 @@ function getInfoForUsers(userIds, callback) {
          }, function(err, response, body) {
             if (err || JSON.parse(body).ok == false) {
                console.log("Invalid response for User ID: " + userId);
-               console.log("Invalid response for User ID: Error - " + JSON.stringify(err));
-               console.log("Invalid response for User ID: response - " + JSON.stringify(response));
-               console.log("Invalid response for User ID: body - " + JSON.stringify(body));
             } else {
                var name = JSON.parse(body).user.name;
                userNames.push(name);
@@ -379,14 +353,10 @@ function getInfoForUsers(userIds, callback) {
             }
          });
       }
-   }, function(err){
-      // if any of the file processing produced an error, err would equal that error
-      if( err ) {
-         // One of the iterations produced an error.
-         // All processing will now stop.
+   }, function(err) {
+      if (err) {
          console.log('A user id failed to process');
       } else {
-         console.log('All user ids have been processed successfully: \n' + userNames);
          callback(null, userNames);
       }
    });
@@ -411,18 +381,10 @@ function sendCheckedInUsersMessage(userId, userNames) {
    requestHelper({
       url: "https://slack.com/api/chat.postMessage",
       qs: postMessageParams
-   }, function(err, response, body) {
-      console.log("Finished sending message");
-   });
+   }, function(err, response, body) {});
 }
 
 app.post('/checkins', function(req, res) {
-   // someone run /checkins
-   // get user group from input
-   // gets list of users in the usergroup
-   //parse through perferred channel of usergroup for each user in usergroup's message
-
-   // console.log("Request Body: " + JSON.stringify(req.body));
    var requestBody = req.body;
    var userGroupName = req.body.text;
    console.log("req: " + JSON.stringify(req.body));
@@ -432,151 +394,13 @@ app.post('/checkins', function(req, res) {
       getUsersInGroup,
       getPreferredChannelMessageHistory,
       getInfoForUsers
-   ], function (err, result) {
-      // result now equals 'done'
+   ], function(err, result) {
       if (err) {
          console.error("Experienced an error: " + err);
+      } else {
+         sendCheckedInUsersMessage(req.body.user_id, result);
       }
-      console.log("Trying to send message with userd_id: " + req.body.user_id + " and names:\n" + result);
-      sendCheckedInUsersMessage(req.body.user_id, result);
-      console.log("async waterfall completed");
    });
-
-   // var userGroupObject = {
-   //    token: ACCESS_TOKEN
-   // };
-   // requestHelper({
-   //    url: "https://slack.com/api/usergroups.list",
-   //    qs: userGroupObject
-   // }, function(err, response, body) {
-   //    var convertedBody = JSON.parse(body);
-
-   //    console.log("converted body: " + JSON.stringify(convertedBody));
-   //    console.log("usergroups: " + JSON.stringify(convertedBody["usergroups"]));
-
-   //    var usergroups = convertedBody["usergroups"];
-   //    for (var i = 0; i < usergroups.length; i++) {
-   //       var group = usergroups[i];
-
-   //       console.log("Comparing " + req.body.text + " to " + group["handle"]);
-
-   //       if (req.body.text == group.handle) {
-   //          var prefChannels = group.prefs.channels;
-   //          console.log("Preferred Channels: " + JSON.stringify(prefChannels));
-
-   //          var getUsersParams = {
-   //             token: ACCESS_TOKEN,
-   //             usergroup: group.id
-   //          };
-   //          requestHelper({
-   //             url: "https://slack.com/api/usergroups.users.list",
-   //             qs: getUsersParams
-   //          }, function(err, response, body) {
-   //             var parsedBody = JSON.parse(body);
-   //             var usersInGroup = parsedBody.users
-
-   //             console.log("body: " + JSON.stringify(parsedBody));
-   //             console.log("usersInGroup: " + usersInGroup);
-
-   //             var today8AM = new Date();
-   //             today8AM.setHours(13);
-   //             today8AM.setMinutes(0);
-   //             today8AM.setSeconds(0);
-   //             today8AM.setMilliseconds(0);
-
-   //             var today1115AM = new Date();
-   //             today1115AM.setHours(16);
-   //             today1115AM.setMinutes(15);
-   //             today1115AM.setMilliseconds(0);
-
-   //             // for each of the preferred channels
-   //             for (var i = 0; i < prefChannels.length; i++) {
-   //                // go through each and get their messages
-   //                var preferredChannelId = prefChannels[i];
-   //                console.log("Preferred Channel Id: " + preferredChannelId);
-
-   //                var channelHistoryParams = {
-   //                   token: ACCESS_TOKEN,
-   //                   channel: preferredChannelId,
-   //                   oldest: (today8AM.getTime() / 1000),
-   //                   latest: (today1115AM.getTime() / 1000)
-   //                };
-   //                requestHelper({
-   //                   url: "https://slack.com/api/channels.history",
-   //                   qs: channelHistoryParams
-   //                }, function(err, response, body) {
-   //                   console.log("Body: " + body);
-   //                   var parsedBody = JSON.parse(body)
-   //                   var messages = parsedBody.messages
-   //                   console.log("Messages: " + JSON.stringify(messages));
-
-   //                   var listOfUsers = [];
-   //                   var checkedInUserIds = [];
-
-   //                   // for each of the messages, check what user said them
-   //                   // if they haven't been added to checked in users, 
-   //                   // get user info, then add them
-   //                   for (var i = 0; i < messages.length; i++) {
-   //                      var userID = messages[i].user
-   //                      console.log("userIDFromMessage: " + userID);
-
-   //                      if (checkedInUserIds.indexOf(userID) == -1) {
-   //                         checkedInUserIds.push(userID);
-   //                         var userInfo = {
-   //                            token: ACCESS_TOKEN,
-   //                            user: userID
-   //                         };
-   //                         requestHelper({
-   //                            url: "https://slack.com/api/users.info",
-   //                            qs: userInfo
-   //                         }, function(err, response, body) {
-   //                            if (err || JSON.parse(body).ok == false) {
-   //                               console.log("something broke");
-   //                            } else {
-   //                               console.log("Body: " + body);
-
-   //                               var body = JSON.parse(body);
-   //                               console.log("Body.user: " + JSON.stringify(body.user));
-
-   //                               var name = body.user.name;
-   //                               console.log("Parsed Name: " + name);
-
-   //                               listOfUsers.push(name);
-
-   //                               // make online message for channel
-   //                               var onlineUsersMessage = "List of Users Online: \n";
-   //                               for (var i = 0; i < listOfUsers.length; i++) {
-   //                                  onlineUsersMessage = listOfUsers[i] + " is online. \n"
-   //                                  console.log("online message: " + onlineUsersMessage);
-   //                               }
-
-   //                               // req.body.user_id
-   //                               console.log("userID: " + req.body.user_id);
-   //                               var postMessageParams = {
-   //                                  token: BOT_ACCESS_TOKEN,
-   //                                  channel: req.body.user_id,
-   //                                  text: onlineUsersMessage,
-   //                                  as_user: true,
-   //                                  parse: "full"
-   //                               };
-   //                               requestHelper({
-   //                                  url: "https://slack.com/api/chat.postMessage",
-   //                                  qs: postMessageParams
-   //                               }, function(err, response, body) {
-   //                                  res.end();
-   //                               });
-   //                            }
-   //                         });
-   //                      }
-   //                   }
-   //                });
-   //             }
-
-   //             // res.end();
-   //          });
-   //       }
-   //    }
-   // });
 
    res.end();
 })
