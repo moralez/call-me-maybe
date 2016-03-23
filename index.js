@@ -322,10 +322,7 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
          url: "https://slack.com/api/channels.history",
          qs: channelHistoryParams
       }, function(err, response, body) {
-         console.log("Body: " + body);
-         var parsedBody = JSON.parse(body)
-         var messages = parsedBody.messages
-         console.log("Messages: " + JSON.stringify(messages));
+         var messages = JSON.parse(body).messages;
 
          for (var i = 0; i < messages.length; i++) {
             var userID = messages[i].user
@@ -338,15 +335,51 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
          callback(null, checkedInUserIds);
       });
    }, function(err, results) {
-      // if any of the file processing produced an error, err would equal that error
       if( err ) {
-         // One of the iterations produced an error.
-         // All processing will now stop.
          console.log('A file failed to process');
       } else {
          console.log('All messages have been processed successfully');
          console.log("Results: " + results);
          console.log("Checked In Users: " + checkedInUserIds);
+         callback(null, checkedInUserIds);
+      }
+   });
+}
+
+function getInfoForUsers(userIds, callback) {
+
+   var userNames = [];
+
+   async.each(userIds, function(userId, callback) {
+      // Perform operation on file here.
+      console.log('Processing User ID: ' + userId);
+
+      var userInfo = {
+         token: ACCESS_TOKEN,
+         user: userId
+      };
+      requestHelper({
+         url: "https://slack.com/api/users.info",
+         qs: userInfo
+      }, function(err, response, body) {
+         if (err || JSON.parse(body).ok == false) {
+            console.log("Invalid response for User ID: " + userId);
+            callback("Invalid response for User ID: " + userId);
+         } else {
+            var name = JSON.parse(body).user.name;
+            userNames.push(name);
+            callback();
+         }
+      });
+   }, function(err){
+      // if any of the file processing produced an error, err would equal that error
+      if( err ) {
+         // One of the iterations produced an error.
+         // All processing will now stop.
+         console.log('A user id failed to process');
+      } else {
+         console.log('All user ids have been processed successfully: \n' + userNames);
+         callback(null, "done with names");
       }
    });
 }
@@ -365,11 +398,12 @@ app.post('/checkins', function(req, res) {
    async.waterfall([
       async.apply(findUserGroupWithName, userGroupName),
       getUsersInGroup,
-      getPreferredChannelMessageHistory
+      getPreferredChannelMessageHistory,
+      getInfoForUsers
    ], function (err, result) {
       // result now equals 'done'
       if (err) {
-         console.error(err);
+         console.error("Experienced an error: " + err);
       }
       console.log("async waterfall completed");
    });
@@ -464,40 +498,40 @@ app.post('/checkins', function(req, res) {
                            }, function(err, response, body) {
                               if (err || JSON.parse(body).ok == false) {
                                  console.log("something broke");
-                                 return;
+                              } else {
+                                 console.log("Body: " + body);
+
+                                 var body = JSON.parse(body);
+                                 console.log("Body.user: " + JSON.stringify(body.user));
+
+                                 var name = body.user.name;
+                                 console.log("Parsed Name: " + name);
+
+                                 listOfUsers.push(name);
+
+                                 // make online message for channel
+                                 var onlineUsersMessage = "List of Users Online: \n";
+                                 for (var i = 0; i < listOfUsers.length; i++) {
+                                    onlineUsersMessage = listOfUsers[i] + " is online. \n"
+                                    console.log("online message: " + onlineUsersMessage);
+                                 }
+
+                                 // req.body.user_id
+                                 console.log("userID: " + req.body.user_id);
+                                 var postMessageParams = {
+                                    token: BOT_ACCESS_TOKEN,
+                                    channel: req.body.user_id,
+                                    text: onlineUsersMessage,
+                                    as_user: true,
+                                    parse: "full"
+                                 };
+                                 requestHelper({
+                                    url: "https://slack.com/api/chat.postMessage",
+                                    qs: postMessageParams
+                                 }, function(err, response, body) {
+                                    res.end();
+                                 });
                               }
-                              console.log("Body: " + body);
-
-                              var body = JSON.parse(body);
-                              console.log("Body.user: " + JSON.stringify(body.user));
-
-                              var name = body.user.name;
-                              console.log("Parsed Name: " + name);
-
-                              listOfUsers.push(name);
-
-                              // make online message for channel
-                              var onlineUsersMessage = "List of Users Online: \n";
-                              for (var i = 0; i < listOfUsers.length; i++) {
-                                 onlineUsersMessage = listOfUsers[i] + " is online. \n"
-                                 console.log("online message: " + onlineUsersMessage);
-                              }
-
-                              // req.body.user_id
-                              console.log("userID: " + req.body.user_id);
-                              var postMessageParams = {
-                                 token: BOT_ACCESS_TOKEN,
-                                 channel: req.body.user_id,
-                                 text: onlineUsersMessage,
-                                 as_user: true,
-                                 parse: "full"
-                              };
-                              requestHelper({
-                                 url: "https://slack.com/api/chat.postMessage",
-                                 qs: postMessageParams
-                              }, function(err, response, body) {
-                                 res.end();
-                              });
                            });
                         }
                      }
