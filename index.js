@@ -288,13 +288,67 @@ function getUsersInGroup(userGroup, callback) {
       console.log("getUsersInGroup() - body: " + JSON.stringify(parsedBody));
       console.log("getUsersInGroup() - usersInGroup: " + usersInGroup);
 
-      callback(null, 'done');
+      callback(null, userGroup, usersInGroup);
    });
 }
 
-function myLastFunction(arg1, callback) {
-   // arg1 now equals 'three'
-   callback(null, 'done');
+function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
+   var today8AM = new Date();
+   today8AM.setHours(13);
+   today8AM.setMinutes(0);
+   today8AM.setSeconds(0);
+   today8AM.setMilliseconds(0);
+
+   var today1115AM = new Date();
+   today1115AM.setHours(16);
+   today1115AM.setMinutes(15);
+   today1115AM.setMilliseconds(0);
+
+   var prefChannels = userGroup.prefs.channels;
+   console.log("Preferred Channels: " + JSON.stringify(prefChannels));
+
+   var checkedInUserIds = [];
+
+   async.map(prefChannels, function(preferredChannelId, callback) {
+      console.log("Preferred Channel Id: " + preferredChannelId);
+
+      var channelHistoryParams = {
+         token: ACCESS_TOKEN,
+         channel: preferredChannelId,
+         oldest: (today8AM.getTime() / 1000),
+         latest: (today1115AM.getTime() / 1000)
+      };
+      requestHelper({
+         url: "https://slack.com/api/channels.history",
+         qs: channelHistoryParams
+      }, function(err, response, body) {
+         console.log("Body: " + body);
+         var parsedBody = JSON.parse(body)
+         var messages = parsedBody.messages
+         console.log("Messages: " + JSON.stringify(messages));
+
+         for (var i = 0; i < messages.length; i++) {
+            var userID = messages[i].user
+            console.log("userIDFromMessage: " + userID);
+
+            if (checkedInUserIds.indexOf(userID) == -1) {
+               checkedInUserIds.push(userID);
+            }
+         }
+         callback(null, checkedInUserIds);
+      });
+   }, function(err, results) {
+      // if any of the file processing produced an error, err would equal that error
+      if( err ) {
+         // One of the iterations produced an error.
+         // All processing will now stop.
+         console.log('A file failed to process');
+      } else {
+         console.log('All messages have been processed successfully');
+         console.log("Results: " + results);
+         console.log("Checked In Users: " + checkedInUserIds);
+      }
+   });
 }
 
 app.post('/checkins', function(req, res) {
@@ -310,7 +364,8 @@ app.post('/checkins', function(req, res) {
 
    async.waterfall([
       async.apply(findUserGroupWithName, userGroupName),
-      getUsersInGroup
+      getUsersInGroup,
+      getPreferredChannelMessageHistory
    ], function (err, result) {
       // result now equals 'done'
       if (err) {
@@ -407,10 +462,14 @@ app.post('/checkins', function(req, res) {
                               url: "https://slack.com/api/users.info",
                               qs: userInfo
                            }, function(err, response, body) {
+                              if (err || JSON.parse(body).ok == false) {
+                                 console.log("something broke");
+                                 return;
+                              }
                               console.log("Body: " + body);
 
                               var body = JSON.parse(body);
-                              console.log("Body.user" + JSON.stringify(body.user));
+                              console.log("Body.user: " + JSON.stringify(body.user));
 
                               var name = body.user.name;
                               console.log("Parsed Name: " + name);
