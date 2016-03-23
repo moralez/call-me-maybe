@@ -244,7 +244,7 @@ function findUserGroupWithName(groupName, callback) {
       qs: userGroupObject
    }, function(err, response, body) {
       if (err) {
-         return callback(new Error("failed getting something:" + err.message))
+         return callback(new Error("failed getting list of user groups:" + err.message))
       }
 
       var convertedBody = JSON.parse(body);
@@ -271,10 +271,25 @@ function findUserGroupWithName(groupName, callback) {
    });
 }
 
-function mySecondFunction(userGroup, callback) {
-   // arg1 now equals 'one' and arg2 now equals 'two'
+function getUsersInGroup(userGroup, callback) {
    console.log("User Group: " + JSON.stringify(userGroup));
-   callback(null, 'done');
+
+   var getUsersParams = {
+      token: ACCESS_TOKEN,
+      usergroup: userGroup.id
+   };
+   requestHelper({
+      url: "https://slack.com/api/usergroups.users.list",
+      qs: getUsersParams
+   }, function(err, response, body) {
+      var parsedBody = JSON.parse(body);
+      var usersInGroup = parsedBody.users
+
+      console.log("getUsersInGroup() - body: " + JSON.stringify(parsedBody));
+      console.log("getUsersInGroup() - usersInGroup: " + usersInGroup);
+
+      callback(null, 'done');
+   });
 }
 
 function myLastFunction(arg1, callback) {
@@ -295,7 +310,7 @@ app.post('/checkins', function(req, res) {
 
    async.waterfall([
       async.apply(findUserGroupWithName, userGroupName),
-      mySecondFunction
+      getUsersInGroup
    ], function (err, result) {
       // result now equals 'done'
       if (err) {
