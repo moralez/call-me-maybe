@@ -651,17 +651,17 @@ var userID = request.user_id;
 
   var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, user: userID, as_user: true };
   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
-   console.log("user name::: " + response.body.user.profile.real_name);
+   console.log("response body::: " + response.body);
    res.end();
  
 });
 
 
 
-var optionalText = request.text;
-if (optionalText.length === 0) {
-  optionalText = " " + "is going to lunch.";
-}
+// var optionalText = request.text;
+// if (optionalText.length === 0) {
+//   optionalText = " " + "is going to lunch.";
+// }
 
 });
 
