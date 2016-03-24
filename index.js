@@ -650,8 +650,9 @@ var channelID = request.channel_id;
 console.log("CHANNEL ID: " + channelID);
 var userID = request.user_id;
 console.log("USER ID: " + userID);
+console.log("Team id:: " + request.team_id);
 
- getBotAccessToken(req.body.team_id, function(botAccessToken) {
+ getBotAccessToken(request.team_id, function(botAccessToken) {
 console.log("Access token: " + botAccessToken);
 
    var postMessageParams = { token:botAccessToken, user: userID};
