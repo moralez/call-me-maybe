@@ -660,12 +660,10 @@ console.log("Access token: " + botAccessToken);
 
 
    var setPresenceParams = { token:botAccessToken, presence: "away" };
-                  requestHelper({url:"https://slack.com/api/users.setPresence", qs:setPresenceParams}, function(err, response, body) {
-                     console.log("Finished setting presence");
-                     res.end();
-                  });
- 
-   });
+   requestHelper({url:"https://slack.com/api/users.setPresence", qs:setPresenceParams}, function(err, response, body) {
+      console.log("Finished setting presence");
+            res.end();
+    });
 
 
    var postMessageParams = { token:botAccessToken, channel:channelID, text: lunchMessage, as_user: true };
