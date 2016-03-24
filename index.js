@@ -488,6 +488,18 @@ function getBotAccessToken(teamID, callback) {
 });
 }
 
+function getAccessToken(teamID, callback) {
+ client.get(teamID, function(err, reply) {
+  console.log("Error: " + err);
+  console.log("reply: " + reply);   
+
+  var parsedJson = JSON.parse(reply)
+  var json = JSON.stringify(parsedJson["ACCESS_TOKEN"]).replace(/"/g, "")
+  console.log("token object: " + json);
+  callback(json)
+});
+}
+
 app.post('/chuck', function(req, res) {
  var params = { exclude:"explicit"};
  var requestBody = req.body;
@@ -658,8 +670,8 @@ console.log("Access token: " + botAccessToken);
     lunchMessage = realName + " is going to lunch.";
    }
 
-
-   var setPresenceParams = { token:botAccessToken, presence: "away" };
+   getAccessToken(request.team_id, function(accessToken) {
+   var setPresenceParams = { token:accessToken, presence: "away" };
    requestHelper({url:"https://slack.com/api/users.setPresence", qs:setPresenceParams}, function(err, response, body) {
       console.log("Finished setting presence");
       console.log("prescence body: " + body);
@@ -667,6 +679,8 @@ console.log("Access token: " + botAccessToken);
                   requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
                      console.log("Finished sending postMessage for lunch");
                      res.end();
+
+    });
                   
  
    });
