@@ -652,18 +652,18 @@ var userID = request.user_id;
 console.log("USER ID: " + userID);
 console.log("Team id:: " + request.team_id);
 
-//  getBotAccessToken(request.team_id, function(botAccessToken) {
-// console.log("Access token: " + botAccessToken);
+ getBotAccessToken(request.team_id, function(botAccessToken) {
+console.log("Access token: " + botAccessToken);
 
-//    var postMessageParams = { token:botAccessToken, user: userID};
-//   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
-//    console.log("response::: " + JSON.stringify(response));
+   var postMessageParams = { token:botAccessToken, user: userID};
+  requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
+   console.log("response::: " + JSON.stringify(response));
    
-//    res.end();
+   res.end();
  
-//    });
+   });
 
-// });
+});
 
 
 // var optionalText = request.text;
