@@ -647,9 +647,11 @@ var request = JSON.stringify(req.body);
 console.log("Lunch request: " + request);
 
 var channelID = request.channel_id;
+console.log("CHANNEL ID: " + userID);
 var userID = request.user_id;
+console.log("USER ID: " + userID);
 
-  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, user: userID, as_user: true };
+  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, user: userID};
   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
    console.log("response body::: " + response.body);
    res.end();
