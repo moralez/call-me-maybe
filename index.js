@@ -649,14 +649,13 @@ console.log("Lunch request: " + request);
 var channelID = request.channel_id;
 var userID = request.user_id;
 
-getBotAccessToken(req.body.team_id, function(botAccessToken)  {
-  var postMessageParams = { token:botAccessToken, channel: channelID, user: userID, as_user: true };
+  var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, user: userID, as_user: true };
   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
    console.log("user name::: " + response.body.user.profile.real_name);
    res.end();
  
 });
- });
+
 
 
 var optionalText = request.text;
