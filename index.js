@@ -650,7 +650,7 @@ var channelID = request.channel_id;
 console.log("CHANNEL ID: " + channelID);
 var userID = request.user_id;
 console.log("USER ID: " + userID);
-
+console.log("Access TOKEN: " + ACCESS_TOKEN);
   var postMessageParams = { token:ACCESS_TOKEN, user: userID};
   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
    console.log("response::: " + JSON.stringify(response));
