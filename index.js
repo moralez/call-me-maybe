@@ -662,7 +662,7 @@ console.log("Access token: " + botAccessToken);
 
    var parsedBody = JSON.parse(body);
    var realName = parsedBody.real_name;
-   console.log("realName:: " + JSON.stringify(realName));
+   console.log("realName:: " + body.real_name);
    
    res.end();
  
