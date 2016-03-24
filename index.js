@@ -659,9 +659,9 @@ console.log("Access token: " + botAccessToken);
    }
 
 
-   var postMessageParams = { token:botAccessToken, presence: "away" };
-                  requestHelper({url:"https://slack.com/api/users.setPresence", qs:postMessageParams}, function(err, response, body) {
-                     console.log("Finished sending postMessage for lunch");
+   var setPresenceParams = { token:botAccessToken, presence: "away" };
+                  requestHelper({url:"https://slack.com/api/users.setPresence", qs:setPresenceParams}, function(err, response, body) {
+                     console.log("Finished setting presence");
                      res.end();
                   });
  
