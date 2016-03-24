@@ -650,7 +650,7 @@ console.log("Access token: " + botAccessToken);
    var realName = JSON.parse(body).user.real_name;
    console.log("realName:: " + realName);
    if(!realName) {
-      realName = JSON.parse(body).user.name
+      realName = JSON.parse(body).user.name;
       console.log("fall back name: " + realName);
    }
    
@@ -666,8 +666,18 @@ console.log("Access token: " + botAccessToken);
     });
 
 
+   var postMessageParams = { token:botAccessToken, channel:channelID, text: lunchMessage, as_user: true };
+                  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                     console.log("Finished sending postMessage for lunch");
+                     res.end();
+                  
+ 
+   });
+
 });
 
+
+});
 
 });
 
