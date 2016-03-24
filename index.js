@@ -626,10 +626,43 @@ app.post('/roulette',function(req,res){
 //get user id that issued command 
 //get user name that issued command 
 //send message to channel for id, "userName is going to lunch"
+//set prescnese to away
 app.post('/lunch', function(req, res){
 
+// {
+//   "token": "1OOgImBXsNlIiKYtI0F1p1GZ",
+//   "team_id": "T0QVDTDPU",
+//   "team_domain": "hackathonproject",
+//   "channel_id": "D0R1M7J5N",
+//   "channel_name": "directmessage",
+//   "user_id": "U0R020L3G",
+//   "user_name": "bmoote",
+//   "command": "/lunch",
+//   "text": "",
+//   "response_url": "https://hooks.slack.com/commands/T0QVDTDPU/29333718549/7P1gfivfQl0uJPKXue8vAMIL"
+// }
+
+
 var request = JSON.stringify(req.body);
-console.log("Lunch request: " + request)
+console.log("Lunch request: " + request);
+
+var channelID = request.channel_id;
+var userID = request.user_id;
+
+getBotAccessToken(req.body.team_id, function(botAccessToken)  {
+  var postMessageParams = { token:botAccessToken, channel: channelID, user: userID, as_user: true };
+  requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
+   console.log("user name::: " + response.body.user.profile.real_name);
+   res.end();
+ 
+});
+ });
+
+
+var optionalText = request.text;
+if (optionalText.length === 0) {
+  optionalText = " " + "is going to lunch.";
+}
 
 });
 
