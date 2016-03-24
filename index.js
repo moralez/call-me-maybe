@@ -644,7 +644,7 @@ app.post('/lunch', function(req, res){
 
 
 var parsedRequest = JSON.stringify(req.body);
-console.log("Lunch request: " + request);
+console.log("Lunch request: " + parsedRequest);
 
 var channelID = parsedRequest.channel_id;
 console.log("CHANNEL ID: " + channelID);
