@@ -658,6 +658,7 @@ console.log("Access token: " + botAccessToken);
    var postMessageParams = { token:botAccessToken, user: userID};
   requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
    console.log("response::: " + JSON.stringify(response));
+   console.log("body::: " + JSON.stringify(body));
    
    res.end();
  
