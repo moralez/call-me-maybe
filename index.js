@@ -643,12 +643,12 @@ app.post('/lunch', function(req, res){
 // }
 
 
-var request = JSON.stringify(req.body);
+var parsedRequest = JSON.stringify(req.body);
 console.log("Lunch request: " + request);
 
-var channelID = JSON.parse(request.channel_id);
-console.log("CHANNEL ID: " + userID);
-var userID = JSON.parse(request.user_id);
+var channelID = parsedRequest.channel_id;
+console.log("CHANNEL ID: " + channelID);
+var userID = parsedRequest.user_id;
 console.log("USER ID: " + userID);
 
   var postMessageParams = { token:BOT_ACCESS_TOKEN, channel: channelID, user: userID};
