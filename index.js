@@ -619,3 +619,17 @@ app.post('/roulette',function(req,res){
       }
    })
 });
+
+//lunch route
+
+//get channel command issued in
+//get user id that issued command 
+//get user name that issued command 
+//send message to channel for id, "userName is going to lunch"
+app.post('/lunch', function(req, res){
+
+var request = JSON.stringify(req.body);
+console.log("Lunch request: " + request)
+
+});
+
