@@ -627,57 +627,73 @@ app.post('/roulette',function(req,res){
 //get user name that issued command 
 //send message to channel for id, "userName is going to lunch"
 //set prescnese to away
-app.post('/lunch', function(req, res){
+app.post('/lunch', function(req, res) {
 
-var request = req.body;
-console.log("Lunch request: " + JSON.stringify(req.body));
+    var request = req.body;
+    console.log("Lunch request: " + JSON.stringify(req.body));
 
-var channelID = request.channel_id;
-console.log("CHANNEL ID: " + channelID);
-var userID = request.user_id;
-console.log("USER ID: " + userID);
-console.log("Team id:: " + request.team_id);
+    var channelID = request.channel_id;
+    console.log("CHANNEL ID: " + channelID);
+    var userID = request.user_id;
+    console.log("USER ID: " + userID);
+    console.log("Team id:: " + request.team_id);
 
-var lunchMessage = res.text;
- getBotAccessToken(request.team_id, function(botAccessToken) {
-console.log("Access token: " + botAccessToken);
+    var lunchMessage = res.text;
+    getBotAccessToken(request.team_id, function(botAccessToken) {
+        console.log("Access token: " + botAccessToken);
 
-   var postMessageParams = { token:botAccessToken, user: userID};
-  requestHelper({url:"https://slack.com/api/users.info", qs:postMessageParams}, function(err, response, body) {
-   console.log("response::: " + JSON.stringify(response));
-   console.log("body::: " + JSON.stringify(body));
+        var postMessageParams = {
+            token: botAccessToken,
+            user: userID
+        };
+        requestHelper({
+            url: "https://slack.com/api/users.info",
+            qs: postMessageParams
+        }, function(err, response, body) {
+            console.log("response::: " + JSON.stringify(response));
+            console.log("body::: " + JSON.stringify(body));
 
-   var realName = JSON.parse(body).user.real_name;
-   console.log("realName:: " + realName);
-   if(!realName) {
-      realName = JSON.parse(body).user.name;
-      console.log("fall back name: " + realName);
-   }
-   
-   if(!lunchMessage) {
-    lunchMessage = realName + " is going to lunch.";
-   }
+            var realName = JSON.parse(body).user.real_name;
+            console.log("realName:: " + realName);
+            if (!realName) {
+                realName = JSON.parse(body).user.name;
+                console.log("fall back name: " + realName);
+            }
+
+            if (!lunchMessage) {
+                lunchMessage = realName + " is going to lunch.";
+            }
 
 
-   var setPresenceParams = { token:botAccessToken, presence: "away" };
-   requestHelper({url:"https://slack.com/api/users.setPresence", qs:setPresenceParams}, function(err, response, body) {
-      console.log("Finished setting presence");
-            var postMessageParams = { token:botAccessToken, channel:channelID, text: lunchMessage, as_user: true };
-                  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
-                     console.log("Finished sending postMessage for lunch");
-                     res.end();
-                  
- 
-   });
+            var setPresenceParams = {
+                token: botAccessToken,
+                presence: "away"
+            };
+            requestHelper({
+                url: "https://slack.com/api/users.setPresence",
+                qs: setPresenceParams
+            }, function(err, response, body) {
+                console.log("Finished setting presence");
+                var postMessageParams = {
+                    token: botAccessToken,
+                    channel: channelID,
+                    text: lunchMessage,
+                    as_user: true
+                };
+                requestHelper({
+                    url: "https://slack.com/api/chat.postMessage",
+                    qs: postMessageParams
+                }, function(err, response, body) {
+                    console.log("Finished sending postMessage for lunch");
+                    res.end();
+
+
+                });
+            });
+
+        });
+
+
     });
 
-
-   
-
 });
-
-
-});
-
-});
-
