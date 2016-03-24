@@ -629,20 +629,6 @@ app.post('/roulette',function(req,res){
 //set prescnese to away
 app.post('/lunch', function(req, res){
 
-// {
-//   "token": "1OOgImBXsNlIiKYtI0F1p1GZ",
-//   "team_id": "T0QVDTDPU",
-//   "team_domain": "hackathonproject",
-//   "channel_id": "D0R1M7J5N",
-//   "channel_name": "directmessage",
-//   "user_id": "U0R020L3G",
-//   "user_name": "bmoote",
-//   "command": "/lunch",
-//   "text": "",
-//   "response_url": "https://hooks.slack.com/commands/T0QVDTDPU/29333718549/7P1gfivfQl0uJPKXue8vAMIL"
-// }
-
-
 var request = req.body;
 console.log("Lunch request: " + JSON.stringify(req.body));
 
@@ -652,6 +638,7 @@ var userID = request.user_id;
 console.log("USER ID: " + userID);
 console.log("Team id:: " + request.team_id);
 
+var lunchMessage = res.text;
  getBotAccessToken(request.team_id, function(botAccessToken) {
 console.log("Access token: " + botAccessToken);
 
@@ -662,18 +649,27 @@ console.log("Access token: " + botAccessToken);
 
    var realName = JSON.parse(body).user.real_name;
    console.log("realName:: " + realName);
+   if(!realName) {
+      realName = JSON.parse(body).user.name
+      console.log("fall back name: " + realName);
+   }
    
-   res.end();
+   if(!lunchMessage) {
+    lunchMessage = realName + " is going to lunch.";
+   }
+
+
+
+   var postMessageParams = { token:botAccessToken, channel:channelID, text: lunchMessage, as_user: true };
+                  requestHelper({url:"https://slack.com/api/chat.postMessage", qs:postMessageParams}, function(err, response, body) {
+                     console.log("Finished sending postMessage for lunch");
+                     res.end();
+                  });
  
    });
 
 });
 
-
-// var optionalText = request.text;
-// if (optionalText.length === 0) {
-//   optionalText = " " + "is going to lunch.";
-// }
 
 });
 
