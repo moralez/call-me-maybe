@@ -234,7 +234,7 @@ app.get('/tokens', function(req, res) {
      });
 })
 
-function findUserGroupWithName(groupName, callback) {
+function findUserGroupWithName(groupName, accessToken, callback) {
    var success = false;
    var userGroupObject = {
       token: ACCESS_TOKEN
@@ -258,7 +258,7 @@ function findUserGroupWithName(groupName, callback) {
          console.log("group.handle: " + group.handle);
          if (groupName == group.handle) {
           console.log("Group name equals handle");
-            callback(null, group);
+            callback(null, group, accessToken);
             success = true;
             return;
          }
@@ -270,7 +270,7 @@ function findUserGroupWithName(groupName, callback) {
    });
 }
 
-function getUsersInGroup(userGroup, callback) {
+function getUsersInGroup(userGroup, accessToken, callback) {
    var getUsersParams = {
       token: ACCESS_TOKEN,
       usergroup: userGroup.id
@@ -279,11 +279,11 @@ function getUsersInGroup(userGroup, callback) {
       url: "https://slack.com/api/usergroups.users.list",
       qs: getUsersParams
    }, function(err, response, body) {
-      callback(null, userGroup, JSON.parse(body).users);
+      callback(null, userGroup, accessToken, JSON.parse(body).users);
    });
 }
 
-function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
+function getPreferredChannelMessageHistory(userGroup,  accessToken, usersInGroup, callback) {
    var today8AM = new Date();
    today8AM.setHours(13);
    today8AM.setMinutes(0);
@@ -320,7 +320,7 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
                checkedInUserIds.push(userID);
             }
          }
-         callback(null, checkedInUserIds);
+         callback(null, checkedInUserIds, accessToken);
       });
    }, function(err, results) {
       if (err) {
@@ -331,7 +331,7 @@ function getPreferredChannelMessageHistory(userGroup, usersInGroup, callback) {
    });
 }
 
-function getInfoForUsers(userIds, callback) {
+function getInfoForUsers(userIds, accessToken,  callback) {
 
    var userNames = [];
 
@@ -393,9 +393,10 @@ app.post('/checkins', function(req, res) {
    var requestBody = req.body;
    var userGroupName = req.body.text;
    console.log("req: " + JSON.stringify(req.body));
+ getAccessToken(req.body.team_id, function(accessToken) {
 
    async.waterfall([
-      async.apply(findUserGroupWithName, userGroupName),
+      async.apply(findUserGroupWithName, userGroupName, accessToken),
       getUsersInGroup,
       getPreferredChannelMessageHistory,
       getInfoForUsers
@@ -403,11 +404,14 @@ app.post('/checkins', function(req, res) {
       if (err) {
          console.error("Experienced an error: " + err);
       } else {
-         sendCheckedInUsersMessage(req.body.user_id, result);
+        getBotAccessToken(req.body.team_id, function(botAccessToken) {
+         sendCheckedInUsersMessage(req.body.user_id, botAccessToken, result);
+       });
       }
    });
 
    res.end();
+ });
 })
 
 
