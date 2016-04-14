@@ -326,12 +326,12 @@ function getPreferredChannelMessageHistory(userGroup,  accessToken, usersInGroup
       if (err) {
          console.log('A preferred channel failed to process');
       } else {
-         callback(null, checkedInUserIds);
+         callback(null, checkedInUserIds, accessToken);
       }
    });
 }
 
-function getInfoForUsers(userIds, accessToken,  callback) {
+function getInfoForUsers(userIds, accessToken, callback) {
 
    var userNames = [];
 
