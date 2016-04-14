@@ -260,7 +260,7 @@ function findUserGroupWithName(groupName, callback) {
       }
 
       if (success == false) {
-         callback('ERROR', null);
+         callback('Unable to find usergroup with name', null);
       }
    });
 }
@@ -478,7 +478,7 @@ requestHelper({url:"http://m.api.qa.apartmentguide.com/search", qs:zipCodeObject
 
 function getBotAccessToken(teamID, callback) {
  client.get(teamID, function(err, reply) {
-  console.log("Error: " + err);
+  console.log("Error, failed to get bot access token: " + err);
   console.log("reply: " + reply);   
 
   var parsedJson = JSON.parse(reply)
@@ -490,7 +490,7 @@ function getBotAccessToken(teamID, callback) {
 
 function getAccessToken(teamID, callback) {
  client.get(teamID, function(err, reply) {
-  console.log("Error: " + err);
+  console.log("Error, failed to get access token: " + err);
   console.log("reply: " + reply);   
 
   var parsedJson = JSON.parse(reply)
