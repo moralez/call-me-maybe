@@ -256,6 +256,7 @@ function findUserGroupWithName(groupName, callback) {
          var group = usergroups[i];
          console.log("group name: " + groupName);
          if (groupName == group.handle) {
+          console.log("Group name equals handle");
             callback(null, group);
             success = true;
             return;
