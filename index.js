@@ -248,7 +248,9 @@ function findUserGroupWithName(groupName, callback) {
       }
 
       var convertedBody = JSON.parse(body);
+        console.log("Converted Body: " + JSON.stringify(convertedBody));
       var usergroups = convertedBody["usergroups"];
+      console.log("userGroups: " + JSON.stringify(usergroups));
 
       for (var i = 0; i < usergroups.length; i++) {
          var group = usergroups[i];
