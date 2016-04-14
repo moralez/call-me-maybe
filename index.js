@@ -237,7 +237,7 @@ app.get('/tokens', function(req, res) {
 function findUserGroupWithName(groupName, accessToken, callback) {
    var success = false;
    var userGroupObject = {
-      token: ACCESS_TOKEN
+      token: accessToken
    };
    requestHelper({
       url: "https://slack.com/api/usergroups.list",
@@ -272,7 +272,7 @@ function findUserGroupWithName(groupName, accessToken, callback) {
 
 function getUsersInGroup(userGroup, accessToken, callback) {
    var getUsersParams = {
-      token: ACCESS_TOKEN,
+      token: accessToken,
       usergroup: userGroup.id
    };
    requestHelper({
@@ -301,7 +301,7 @@ function getPreferredChannelMessageHistory(userGroup,  accessToken, usersInGroup
 
    async.map(prefChannels, function(preferredChannelId, callback) {
       var channelHistoryParams = {
-         token: ACCESS_TOKEN,
+         token: accessToken,
          channel: preferredChannelId,
          oldest: (today8AM.getTime() / 1000),
          latest: (today1115AM.getTime() / 1000)
@@ -342,7 +342,7 @@ function getInfoForUsers(userIds, accessToken, callback) {
          callback();
       } else {
          var userInfo = {
-            token: ACCESS_TOKEN,
+            token: accessToken,
             user: userId
          };
          requestHelper({
@@ -367,7 +367,7 @@ function getInfoForUsers(userIds, accessToken, callback) {
    });
 }
 
-function sendCheckedInUsersMessage(userId, userNames) {
+function sendCheckedInUsersMessage(userId, botAccessToken, userNames) {
    var checkedInUsersMessage = "List of Users Who Have Checked In: \n";
    for (var i = 0; i < userNames.length; i++) {
       checkedInUsersMessage += userNames[i];
@@ -377,7 +377,7 @@ function sendCheckedInUsersMessage(userId, userNames) {
    }
 
    var postMessageParams = {
-      token: BOT_ACCESS_TOKEN,
+      token: botAccessToken,
       channel: userId,
       text: checkedInUsersMessage,
       as_user: true,
